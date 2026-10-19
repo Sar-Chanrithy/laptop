@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KH Computer - Premium Laptops Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/jpeg" href="image/logo.png">
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('kh_theme');
+            var theme = savedTheme || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
+</head>
+<body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+        <!-- Logo -->
+        <div class="navbar-logo">
+            <a href="#home" class="logo-link">
+                <div class="logo-box">K</div>
+                <div class="logo-text">
+                    <span class="main-title">KH COMPUTER</span>
+                </div>
+            </a>
+        </div>
+            <!-- Hamburger Menu -->
+            <div class="hamburger-menu" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <!-- Navigation Menu -->
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#products" class="nav-link dropdown-toggle">
+                        Products
+                        <span class="dropdown-arrow">▼</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#products" class="dropdown-item" data-filter="gaming">Gaming Laptops</a>
+                        <a href="#products" class="dropdown-item" data-filter="business">Business Laptops</a>
+                        <a href="#products" class="dropdown-item" data-filter="ultrabook">Ultrabooks</a>
+                        <a href="#products" class="dropdown-item" data-filter="budget">Budget Friendly</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="#products" class="nav-link">Brands</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#deals" class="nav-link">Deals</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+                <li class="nav-item admin-nav-item" id="adminNavItem" style="display: none;">
+                    <a href="#admin" class="nav-link admin-nav-link" onclick="event.preventDefault(); openAdminDashboard();">
+                        <i class="fa-solid fa-shield-halved"></i> Admin
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Right Side Icons -->
+            <div class="navbar-right">
+                <button type="button" class="icon-btn theme-toggle-btn" id="themeToggleBtn" title="Switch to Dark Mode" aria-label="Toggle Light and Dark Mode">
+                    <i class="fa-solid fa-moon" id="themeToggleIcon"></i>
+                </button>
+                <a href="#search" class="icon-btn search-icon" title="Search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </a>
+                <a href="#cart" class="icon-btn cart-icon" title="Shopping Cart" onclick="event.preventDefault(); openCart()">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+                <a href="#favorites" class="icon-btn favorite-icon" title="Favorites" onclick="event.preventDefault(); openFavorites()">
+                    <i class="fa-solid fa-heart"></i>
+                    <span class="favorite-badge" id="favoriteBadge">0</span>
+                </a>
+                <a href="#account" class="icon-btn account-icon" title="Account">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    
+ 
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-wrapper">
+            <div class="hero-content">
+                <div class="hero-badge"> Discover Our Collection</div>
+                <h1>Welcome to KH COMPUTER</h1>
+                <p>Find your perfect laptop from top brands with trusted support, quality service, and great value.</p>
+                <div class="hero-actions">
+                    <a href="#products" class="cta-button">Shop Now</a>
+                    <a href="#products" class="hero-link">View Products</a>
+                </div>
+            </div>
+ 
+            <div class="hero-visual">
+                <div class="hero-device">
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=900&q=80"
+                     alt="Modern laptop" class="hero-laptop-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Selection-->
+    
+    <section class="products-section" id="products">
+        <div class="products-container">
+            <div class="section-header">
+                <h2>Featured Laptops</h2>
+                <p>Discover our premium collection of high-performance laptops</p>
+            </div>
+ 
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="gaming">Gaming</button>
+                <button class="filter-btn" data-filter="business">Business</button>
+                <button class="filter-btn" data-filter="ultrabook">Ultrabook</button>
+                <button class="filter-btn" data-filter="budget">Budget</button>
+            </div>
+ 
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be generated here -->
+            </div>
+ 
+            <div class="load-more-container">
+                <button class="load-more-btn">Load More Products</button>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- Product Detail Modal -->
+    <div class="modal section-hidden" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Product Details</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Detail content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+<!-- Account Modal -->
+<div class="modal" id="accountModal">
+    <div class="modal-content account-modal-content">
+        <div class="modal-header">
+            <h2 id="accountModalTitle">Account</h2>
+            <button class="close-btn" onclick="closeAccountModal()">&times;</button>
+        </div>
+        <div class="modal-tabs" id="accountModalTabs">
+            <button class="account-tab active" data-tab="login" onclick="switchAccountTab(event)">Login</button>
+            <button class="account-tab" data-tab="register" onclick="switchAccountTab(event)">Register</button>
+        </div>
+        <div class="modal-body account-modal-body">
+            <!-- Logged In Profile View -->
+            <div id="loggedInView" class="logged-in-view" style="display: none;">
+                <div class="user-avatar-circle">
+                    <i class="fa-solid fa-user-shield" id="profileRoleIcon"></i>
+                </div>
+                <h3 id="profileUserName">User Name</h3>
+                <p id="profileUserEmail">user@example.com</p>
+                <div class="role-pill-badge" id="profileRoleBadge">CLIENT / USER</div>
+                
+                <div class="profile-actions-box">
+                    <button type="button" class="admin-open-btn" id="profileAdminBtn" style="display: none;" onclick="closeAccountModal(); openAdminDashboard();">
+                        <i class="fa-solid fa-shield-halved"></i> Open Admin Dashboard
+                    </button>
+                    <button type="button" class="profile-logout-btn" onclick="logoutAccount()">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="account-form active" onsubmit="event.preventDefault(); loginAccount();">
+                <div class="login-role-hints">
+                    <span class="hint-title"><i class="fa-solid fa-circle-info"></i> Login Guide:</span>
+                    <span>• <strong>Admin Login:</strong> <code>admin@khcomputer.com</code> | Pass: <code>admin123</code></span>
+                    <span>• <strong>User / Client:</strong> Enter your email or Register below to buy!</span>
+                </div>
+                <label>Email or Username</label>
+                <input type="text" id="loginEmail" placeholder="admin@khcomputer.com or client email" required>
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter password" required>
+                <button class="checkout-btn" type="submit">Login</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="account-form" onsubmit="event.preventDefault(); registerAccount();">
+                <div class="login-role-hints client-hint">
+                    <span class="hint-title"><i class="fa-solid fa-user"></i> Client Registration:</span>
+                    <span>Create your buyer account to shop, track cart items and place orders!</span>
+                </div>
+                <label>Full Name</label>
+                <input type="text" id="registerName" placeholder="Your name" required>
+                <label>Email</label>
+                <input type="email" id="registerEmail" placeholder="you@example.com" required>
+                <label>Password</label>
+                <input type="password" id="registerPassword" placeholder="Create password" required>
+                <label>Confirm Password</label>
+                <input type="password" id="registerPasswordConfirm" placeholder="Confirm password" required>
+                <button class="checkout-btn" type="submit">Register as Client</button>
+            </form>
+            <div id="accountMessage" class="account-message"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Dashboard Modal -->
+<div class="modal admin-dashboard-modal" id="adminDashboardModal">
+    <div class="modal-content admin-dashboard-content">
+        <div class="modal-header admin-dashboard-header">
+            <div class="admin-header-title">
+                <h2><i class="fa-solid fa-shield-halved"></i> Admin Management Dashboard</h2>
+                <span class="admin-badge"><i class="fa-solid fa-lock-open"></i> Full Control</span>
+            </div>
+            <div class="admin-header-actions">
+                <button type="button" class="admin-logout-btn" onclick="logoutAccount()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                <button type="button" class="close-btn" onclick="closeAdminDashboard()">&times;</button>
+            </div>
+        </div>
+
+        <div class="modal-body admin-dashboard-body">
+            <!-- Stats overview -->
+            <div class="admin-stats-grid">
+                <div class="admin-stat-card">
+                    <div class="stat-icon stat-blue"><i class="fa-solid fa-laptop"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statTotalProducts">0</span>
+                        <span class="stat-label">Total Laptops</span>
+                    </div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="stat-icon stat-green"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statTotalOrders">0</span>
+                        <span class="stat-label">Orders Received</span>
+                    </div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="stat-icon stat-gold"><i class="fa-solid fa-dollar-sign"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statTotalRevenue">$0.00</span>
+                        <span class="stat-label">Total Volume</span>
+                    </div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="stat-icon stat-purple"><i class="fa-solid fa-users"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statTotalUsers">0</span>
+                        <span class="stat-label">Registered Users</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Tabs -->
+            <div class="admin-tabs">
+                <button type="button" class="admin-tab active" data-tab="addProduct" onclick="switchAdminTab(event, 'addProduct')">
+                    <i class="fa-solid fa-plus-circle"></i> Add New Laptop
+                </button>
+                <button type="button" class="admin-tab" data-tab="manageProducts" onclick="switchAdminTab(event, 'manageProducts')">
+                    <i class="fa-solid fa-boxes-stacked"></i> Manage Laptops (<span id="adminTabProdCount">0</span>)
+                </button>
+                <button type="button" class="admin-tab" data-tab="viewOrders" onclick="switchAdminTab(event, 'viewOrders')">
+                    <i class="fa-solid fa-receipt"></i> Customer Orders (<span id="adminTabOrdersCount">0</span>)
+                </button>
+            </div>
+
+            <!-- Tab 1: Add Product Form -->
+            <div id="adminTabAddProduct" class="admin-tab-content active">
+                <form id="adminAddProductForm" class="admin-form" onsubmit="event.preventDefault(); handleAdminAddProduct();">
+                    <div class="admin-form-grid">
+                        <div class="form-group full-width">
+                            <label><i class="fa-solid fa-laptop"></i> Laptop Model Name *</label>
+                            <input type="text" id="adminProdName" placeholder="e.g. ASUS ROG Strix SCAR 17" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-tags"></i> Category *</label>
+                            <select id="adminProdCategory" required>
+                                <option value="gaming">Gaming</option>
+                                <option value="business">Business</option>
+                                <option value="ultrabook">Ultrabook</option>
+                                <option value="budget">Budget Friendly</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-ribbon"></i> Badge / Tag</label>
+                            <select id="adminProdBadge">
+                                <option value="">None</option>
+                                <option value="Hot">Hot</option>
+                                <option value="Sale">Sale</option>
+                                <option value="New">New</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-dollar-sign"></i> Price ($) *</label>
+                            <input type="number" id="adminProdPrice" min="1" step="any" placeholder="e.g. 1899" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-tag"></i> Original Price ($) (Optional)</label>
+                            <input type="number" id="adminProdOriginalPrice" min="1" step="any" placeholder="e.g. 2199">
+                        </div>
+                        <div class="form-group full-width">
+                            <label><i class="fa-solid fa-image"></i> Laptop Image URL *</label>
+                            <input type="url" id="adminProdImage" placeholder="https://images.unsplash.com/photo-..." required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label><i class="fa-solid fa-align-left"></i> Summary Description *</label>
+                            <input type="text" id="adminProdDesc" placeholder="e.g. Intel i9, RTX 4080, 32GB RAM, 1TB SSD" required>
+                        </div>
+
+                        <!-- Specs subsection -->
+                        <div class="specs-heading full-width">
+                            <h4><i class="fa-solid fa-microchip"></i> Hardware Specifications</h4>
+                        </div>
+                        <div class="form-group">
+                            <label>Processor (CPU)</label>
+                            <input type="text" id="adminSpecCPU" placeholder="e.g. Intel Core i9-13900H">
+                        </div>
+                        <div class="form-group">
+                            <label>Graphics (GPU)</label>
+                            <input type="text" id="adminSpecGPU" placeholder="e.g. NVIDIA RTX 4080 12GB">
+                        </div>
+                        <div class="form-group">
+                            <label>RAM (Memory)</label>
+                            <input type="text" id="adminSpecRAM" placeholder="e.g. 32GB DDR5">
+                        </div>
+                        <div class="form-group">
+                            <label>Storage (SSD)</label>
+                            <input type="text" id="adminSpecStorage" placeholder="e.g. 1TB NVMe SSD">
+                        </div>
+                        <div class="form-group">
+                            <label>Display</label>
+                            <input type="text" id="adminSpecDisplay" placeholder="e.g. 16&quot; QHD 240Hz">
+                        </div>
+                        <div class="form-group">
+                            <label>Weight</label>
+                            <input type="text" id="adminSpecWeight" placeholder="e.g. 2.2 kg">
+                        </div>
+                    </div>
+                    <div class="admin-form-actions">
+                        <button type="submit" class="admin-submit-btn">
+                            <i class="fa-solid fa-plus-circle"></i> Add Laptop to Store
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tab 2: Manage Products Table -->
+            <div id="adminTabManageProducts" class="admin-tab-content">
+                <div class="admin-table-search">
+                    <i class="fa-solid fa-magnifying-glass search-table-icon"></i>
+                    <input type="text" id="adminProductSearch" placeholder="Search laptops by name or category..." oninput="filterAdminProductsTable()">
+                </div>
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Badge</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductsTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 3: Customer Orders Received -->
+            <div id="adminTabViewOrders" class="admin-tab-content">
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Items Ordered</th>
+                                <th>Total</th>
+                                <th>Payment</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminOrdersTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Product Modal -->
+<div class="modal" id="adminEditModal">
+    <div class="modal-content admin-edit-content">
+        <div class="modal-header">
+            <h2><i class="fa-solid fa-pen-to-square"></i> Edit Laptop Details</h2>
+            <button class="close-btn" onclick="closeAdminEditModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="adminEditProductForm" class="admin-form" onsubmit="event.preventDefault(); saveEditedProduct();">
+                <input type="hidden" id="editProdId">
+                <div class="admin-form-grid">
+                    <div class="form-group full-width">
+                        <label>Laptop Name</label>
+                        <input type="text" id="editProdName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="editProdCategory" required>
+                            <option value="gaming">Gaming</option>
+                            <option value="business">Business</option>
+                            <option value="ultrabook">Ultrabook</option>
+                            <option value="budget">Budget Friendly</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Badge</label>
+                        <select id="editProdBadge">
+                            <option value="">None</option>
+                            <option value="Hot">Hot</option>
+                            <option value="Sale">Sale</option>
+                            <option value="New">New</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price ($)</label>
+                        <input type="number" id="editProdPrice" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Original Price ($)</label>
+                        <input type="number" id="editProdOriginalPrice" step="any">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Image URL</label>
+                        <input type="url" id="editProdImage" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Description</label>
+                        <input type="text" id="editProdDesc" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Processor (CPU)</label>
+                        <input type="text" id="editSpecCPU">
+                    </div>
+                    <div class="form-group">
+                        <label>Graphics (GPU)</label>
+                        <input type="text" id="editSpecGPU">
+                    </div>
+                    <div class="form-group">
+                        <label>RAM</label>
+                        <input type="text" id="editSpecRAM">
+                    </div>
+                    <div class="form-group">
+                        <label>Storage</label>
+                        <input type="text" id="editSpecStorage">
+                    </div>
+                    <div class="form-group">
+                        <label>Display</label>
+                        <input type="text" id="editSpecDisplay">
+                    </div>
+                    <div class="form-group">
+                        <label>Weight</label>
+                        <input type="text" id="editSpecWeight">
+                    </div>
+                </div>
+                <div class="admin-form-actions">
+                    <button type="submit" class="admin-submit-btn">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Shopping Cart Modal -->
+<div class="modal" id="cartModal">
+    <div class="modal-content cart-modal-content">
+        <div class="modal-header">
+            <h2>🛒 Shopping Cart</h2>
+            <button class="close-btn" onclick="closeCartModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="cartModalBody">
+            <!-- Cart items will be generated here -->
+        </div>
+        <div class="modal-footer" id="cartModalFooter">
+            <div class="cart-total">Total: $<span id="cartTotal">0</span></div>
+            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </div>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal" id="checkoutModal">
+    <div class="modal-content checkout-modal-content">
+        <div class="modal-header">
+            <h2><i class="fa-brands fa-telegram telegram-modal-icon"></i> Checkout & Order via Telegram</h2>
+            <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
+        </div>
+        <div class="modal-body checkout-modal-body">
+            <div class="checkout-order-summary">
+                <div class="summary-header-row">
+                    <span class="summary-title"><i class="fa-solid fa-receipt"></i> Order Summary</span>
+                    <span class="summary-count" id="checkoutItemsCount">0 items</span>
+                </div>
+                <div id="checkoutItemsList" class="checkout-items-list">
+                    <!-- Dynamic cart items list -->
+                </div>
+                <div class="checkout-total-row">
+                    <span>Total Amount:</span>
+                    <span class="checkout-total-price">$<span id="checkoutTotal">0.00</span></span>
+                </div>
+            </div>
+
+            <form id="checkoutForm" class="checkout-form" onsubmit="event.preventDefault(); submitOrderToTelegram();">
+                <div class="checkout-form-grid">
+                    <div class="form-group">
+                        <label for="orderCustomerName"><i class="fa-solid fa-user"></i> Full Name <span class="required">*</span></label>
+                        <input type="text" id="orderCustomerName" placeholder="e.g. Sok Dara" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderCustomerPhone"><i class="fa-solid fa-phone"></i> Phone / Telegram <span class="required">*</span></label>
+                        <input type="tel" id="orderCustomerPhone" placeholder="e.g. 017 830 021" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="orderCustomerAddress"><i class="fa-solid fa-location-dot"></i> Delivery Address <span class="required">*</span></label>
+                        <input type="text" id="orderCustomerAddress" placeholder="e.g. Stueng Mean Chey, Phnom Penh" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderPaymentMethod"><i class="fa-solid fa-credit-card"></i> Payment Method</label>
+                        <select id="orderPaymentMethod" onchange="handlePaymentMethodChange()">
+                            <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+                            <option value="ABA Pay / KHQR">ABA Pay / KHQR</option>
+                            <option value="Wing / TrueMoney">Wing / TrueMoney</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderCustomerNote"><i class="fa-solid fa-comment-dots"></i> Order Note (Optional)</label>
+                        <input type="text" id="orderCustomerNote" placeholder="e.g. Call before delivery">
+                    </div>
+                </div>
+
+                <!-- Payment QR Code Container (Shows when ABA Pay / KHQR or Bank selected) -->
+                <div id="paymentQrSection" class="payment-qr-section" style="display: none;">
+                    <div class="khqr-card">
+                        <div class="khqr-header">
+                            <div class="khqr-brand">
+                                <span class="khqr-tag">KHQR</span>
+                                <span class="khqr-bank-name" id="khqrBankTitle">ABA BANK</span>
+                            </div>
+                            <div class="khqr-currency">USD</div>
+                        </div>
+
+                        <div class="khqr-body">
+                            <div class="khqr-account-info">
+                                <span class="khqr-account-name">SAR CHANRITHY</span>
+                                <span class="khqr-account-num" id="khqrAccountNum">017 830 021 (ABA)</span>
+                            </div>
+
+                            <div class="khqr-code-box">
+                                <img id="khqrImage" src="" alt="ABA Pay KHQR" class="khqr-code-img">
+                                <div class="khqr-logo-overlay">
+                                    <span class="khqr-center-text">KHQR</span>
+                                </div>
+                            </div>
+
+                            <div class="khqr-amount-box">
+                                <span class="khqr-amount-label">Amount:</span>
+                                <span class="khqr-amount-value" id="khqrAmountDisplay">$0.00</span>
+                            </div>
+
+                            <p class="khqr-instruction">
+                                <i class="fa-solid fa-qrcode"></i> Scan to pay with <strong>ABA Mobile</strong> or any <strong>Bakong App</strong>
+                            </p>
+
+                            <div class="khqr-upload-row">
+                                <label class="khqr-change-btn" title="Upload your personal ABA QR image">
+                                    <i class="fa-solid fa-image"></i> Change to My ABA QR
+                                    <input type="file" id="customQrInput" accept="image/*" style="display: none;" onchange="handleCustomQrUpload(event)">
+                                </label>
+                                <button type="button" class="khqr-reset-btn" onclick="resetDefaultQr()">
+                                    <i class="fa-solid fa-rotate-left"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Telegram Bot API Settings Toggle (Optional) -->
+                <div class="telegram-config-toggle">
+                    <button type="button" class="telegram-settings-btn" onclick="toggleTelegramSettings()">
+                        <i class="fa-solid fa-sliders"></i> Telegram Bot API Settings (Optional) <span id="tgSettingsArrow">▼</span>
+                    </button>
+                    <div id="telegramSettingsBox" class="telegram-settings-box" style="display: none;">
+                        <p class="settings-hint">By default, order sends directly to <strong>@Sar_Chanrithy007</strong> on Telegram. Optionally enter a Telegram Bot Token and Chat ID to also receive automated bot messages:</p>
+                        <div class="form-group">
+                            <label for="tgBotToken">Bot Token</label>
+                            <input type="text" id="tgBotToken" value="8766120266:AAFDlCm0_pKAZr1vTkrlaaqzE4rP2A2stgs">
+                        </div>
+                        <div class="form-group">
+                            <label for="tgChatId">Chat ID / Channel ID</label>
+                            <input type="text" id="tgChatId" value="1116505751">
+                        </div>
+                        <div class="form-group">
+                            <label for="tgUsernameTarget">Store Telegram Username</label>
+                            <input type="text" id="tgUsernameTarget" placeholder="JangWuJi007" value="JangWuJi007">
+                        </div>
+                        <button type="button" class="save-tg-btn" onclick="saveTelegramConfig()">
+                            <i class="fa-solid fa-check"></i> Save Bot Settings
+                        </button>
+                    </div>
+                </div>
+
+                <div class="checkout-actions">
+                    <button type="button" class="back-cart-btn" onclick="backToCart()">
+                        <i class="fa-solid fa-arrow-left"></i> Back to Cart
+                    </button>
+                    <button type="button" class="telegram-order-btn" id="submitOrderBtn" onclick="submitOrderToTelegram(event)">
+                        <i class="fa-brands fa-telegram"></i> Send Order via Telegram
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Order Success Modal -->
+<div class="modal" id="orderSuccessModal">
+    <div class="modal-content success-modal-content">
+        <div class="success-icon-wrap">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h2>Order Placed Successfully!</h2>
+        <p class="success-subtitle">Thank you for ordering with KH COMPUTER.</p>
+        <div class="order-id-badge" id="successOrderIdBadge">Order #KH-000000</div>
+        <p class="success-message">
+            Your order has been formatted and directed to our Telegram chat. If Telegram didn't open automatically, please click below:
+        </p>
+        <div class="success-actions">
+            <a href="#" id="reopenTelegramBtn" class="telegram-order-btn" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-telegram"></i> Open Telegram Chat
+            </a>
+            <button type="button" class="back-cart-btn" onclick="closeOrderSuccessModal()">
+                Continue Shopping
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Favorites Modal -->
+<div class="modal" id="favoritesModal">
+    <div class="modal-content favorites-modal-content">
+        <div class="modal-header">
+            <h2>❤️ Saved Favorites</h2>
+            <button class="close-btn" onclick="closeFavoritesModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="favoritesModalBody">
+            <!-- Favorite items will be generated here -->
+        </div>
+    </div>
+</div>
+
+<section class="deals-section" id="deals">
+    <div class="deals-container">
+        <div class="section-header">
+            <h2>🔥 Hot Deals & Offers</h2>
+            <p>Limited time special offers on premium laptops</p>
+        </div>
+
+        <!-- Deal Timer -->
+        <div class="deal-timer-container">
+            <div class="deal-timer">
+                <div class="timer-item">
+                    <span class="timer-number" id="timerDays">02</span>
+                    <span class="timer-label">Days</span>
+                </div>
+                <span class="timer-separator">:</span>
+                <div class="timer-item">
+                    <span class="timer-number" id="timerHours">15</span>
+                    <span class="timer-label">Hours</span>
+                </div>
+                <span class="timer-separator">:</span>
+                <div class="timer-item">
+                    <span class="timer-number" id="timerMinutes">42</span>
+                    <span class="timer-label">Minutes</span>
+                </div>
+                <span class="timer-separator">:</span>
+                <div class="timer-item">
+                    <span class="timer-number" id="timerSeconds">38</span>
+                    <span class="timer-label">Seconds</span>
+                </div>
+            </div>
+            <p class="deal-expires">Deals end soon! Offer expires in</p>
+        </div>
+
+        <!-- Deal Filters -->
+        <div class="deal-filter-container">
+            <button class="deal-filter-btn active" data-filter="all" onclick="filterDeals('all')">All Deals</button>
+            <button class="deal-filter-btn" data-filter="flash" onclick="filterDeals('flash')">Flash Sale</button>
+            <button class="deal-filter-btn" data-filter="weekend" onclick="filterDeals('weekend')">Weekend Deal</button>
+            <button class="deal-filter-btn" data-filter="bundle" onclick="filterDeals('bundle')">Bundle Offers</button>
+        </div>
+
+        <!-- Deals Grid -->
+        <div class="deals-grid" id="dealsGrid">
+            
+            <!-- Deal 1: Flash Sale -->
+            <div class="deal-card" data-deal-type="flash">
+                <div class="deal-image">
+                    <img src="https://m.media-amazon.com/images/I/61bnpw41yKL._AC_UF350,350_QL50_.jpg" alt="ASUS Gaming Deal">
+                    <div class="deal-badge flash-badge">⚡ FLASH SALE</div>
+                    <div class="deal-countdown" data-end-time="2024-05-28T23:59:59">
+                        <span class="co untdown-text">Ends in: <strong id="countdown-1">2h 30m</strong></span>
+                    </div>
+                    <button class="deal-wishlist" onclick="toggleDealWishlist(event)">♡</button>
+                </div>
+                <div class="deal-info">
+                    <h3 class="deal-product-name">ASUS ROG Strix G16</h3>
+                    <div class="deal-discount">
+                        <span class="discount-percent">-35%</span>
+                        <span class="discount-off">SAVE $1,050</span>
+                    </div>
+                    <p class="deal-description">Intel i9-13900H, RTX 4090, 32GB RAM, 1TB SSD</p>
+                    <div class="deal-pricing">
+                        <span class="deal-current-price">$1,949</span>
+                        <span class="deal-original-price">$2,999</span>
+                    </div>
+                    <div class="deal-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">(542)</span>
+                    </div>
+                    <div class="stock-indicator">
+                        <div class="stock-bar">
+                            <div class="stock-fill" style="width: 25%;"></div>
+                        </div>
+                        <span class="stock-text">Only 8 left in stock!</span>
+                    </div>
+                    <button class="deal-btn" onclick="addDealToCart(event, 'ASUS ROG Strix G16', 1949)">Buy Now</button>
+                </div>
+            </div>
+
+            <!-- Deal 2: Weekend Deal -->
+            <div class="deal-card" data-deal-type="weekend">
+                <div class="deal-image">
+                    <img src="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/22885935/akrales_210922_4759_0040.jpg?quality=90&strip=all&crop=0,0.012016342225429,100,99.975967315549" alt="Dell Weekend Deal">
+                    <div class="deal-badge weekend-badge">🎉 WEEKEND DEAL</div>
+                    <button class="deal-wishlist" onclick="toggleDealWishlist(event)">♡</button>
+                </div>
+                <div class="deal-info">
+                    <h3 class="deal-product-name">Dell XPS 17 Premium</h3>
+                    <div class="deal-discount">
+                        <span class="discount-percent">-28%</span>
+                        <span class="discount-off">SAVE $770</span>
+                    </div>
+                    <p class="deal-description">Intel i7-13700H, RTX 4070, 16GB RAM, 1TB SSD, 4K Display</p>
+                    <div class="deal-pricing">
+                        <span class="deal-current-price">$1,979</span>
+                        <span class="deal-original-price">$2,749</span>
+                    </div>
+                    <div class="deal-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-count">(389)</span>
+                    </div>
+                    <div class="stock-indicator">
+                        <div class="stock-bar">
+                            <div class="stock-fill" style="width: 60%;"></div>
+                        </div>
+                        <span class="stock-text">25+ units available</span>
+                    </div>
+                    <button class="deal-btn" onclick="addDealToCart(event, 'Dell XPS 17 Premium', 1979)">Buy Now</button>
+                </div>
+            </div>
+
+            <!-- Deal 3: Bundle Offer -->
+            <div class="deal-card" data-deal-type="bundle">
+                <div class="deal-image">
+                    <img src="https://photos5.appleinsider.com/gallery/45240-88149-The-new-MacBook-Pro-16-inch-xl.jpg" alt="MacBook Bundle">
+                    <div class="deal-badge bundle-badge">📦 BUNDLE OFFER</div>
+                    <span class="deal-tag">Most Popular</span>
+                    <button class="deal-wishlist" onclick="toggleDealWishlist(event)">♡</button>
+                </div>
+                <div class="deal-info">
+                    <h3 class="deal-product-name">MacBook Pro 16" + Accessories</h3>
+                    <div class="deal-discount">
+                        <span class="discount-percent">-22%</span>
+                        <span class="discount-off">SAVE $880</span>
+                    </div>
+                    <p class="deal-description">M3 Max, 36GB RAM, 1TB + Magic Mouse + Keyboard + Case</p>
+                    <div class="deal-pricing">
+                        <span class="deal-current-price">$3,119</span>
+                        <span class="deal-original-price">$3,999</span>
+                    </div>
+                    <div class="deal-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">(721)</span>
+                    </div>
+                    <div class="bundle-items">
+                        <span class="bundle-label">Includes:</span>
+                        <div class="bundle-list">
+                            <span>✓ Laptop</span>
+                            <span>✓ Mouse</span>
+                            <span>✓ Keyboard</span>
+                            <span>✓ Case</span>
+                        </div>
+                    </div>
+                    <button class="deal-btn" onclick="addDealToCart(event, 'MacBook Pro 16 Bundle', 3119)">Buy Bundle</button>
+                </div>
+            </div>
+
+            <!-- Deal 4: Flash Sale -->
+            <div class="deal-card" data-deal-type="flash">
+                <div class="deal-image">
+                    <img src="https://hp.widen.net/content/n1sx57syoq/webp/n1sx57syoq.png?w=573&h=430&dpi=72&color=ffffff00" alt="HP Flash Sale">
+                    <div class="deal-badge flash-badge">⚡ FLASH SALE</div>
+                    <div class="deal-countdown">
+                        <span class="countdown-text">Ends in: <strong id="countdown-2">1h 45m</strong></span>
+                    </div>
+                    <button class="deal-wishlist" onclick="toggleDealWishlist(event)">♡</button>
+                </div>
+                <div class="deal-info">
+                    <h3 class="deal-product-name">HP Omen 16 Gaming</h3>
+                    <div class="deal-discount">
+                        <span class="discount-percent">-40%</span>
+                        <span class="discount-off">SAVE $1,200</span>
+                    </div>
+                    <p class="deal-description">Intel i9, RTX 4080, 32GB RAM, 1TB SSD, 165Hz Display</p>
+                    <div class="deal-pricing">
+                        <span class="deal-current-price">$1,799</span>
+                        <span class="deal-original-price">$2,999</span>
+                    </div>
+                    <div class="deal-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">(612)</span>
+                    </div>
+                    <div class="stock-indicator">
+                        <div class="stock-bar">
+                            <div class="stock-fill" style="width: 15%;"></div>
+                        </div>
+                        <span class="stock-text">Only 5 left in stock!</span>
+                    </div>
+                    <button class="deal-btn" onclick="addDealToCart(event, 'HP Omen 16 Gaming', 1799)">Buy Now</button>
+                </div>
+            </div>
+
+            <!-- Deal 5: Weekend Deal -->
+            <div class="deal-card" data-deal-type="weekend">
+                <div class="deal-image">
+                    <img src="https://i0.wp.com/cdnssl.ubergizmo.com/wp-content/uploads/2025/01/Lenovo-Legion-7i-Pro-16-Gen-10-2025.jpg" alt="Lenovo Weekend Deal">
+                    <div class="deal-badge weekend-badge">🎉 WEEKEND DEAL</div>
+                    <button class="deal-wishlist" onclick="toggleDealWishlist(event)">♡</button>
+                </div>
+                <div class="deal-info">
+                    <h3 class="deal-product-name">Lenovo Legion Pro 7i</h3>
+                    <div class="deal-discount">
+                        <span class="discount-percent">-32%</span>
+                        <span class="discount-off">SAVE $960</span>
+                    </div>
+                    <p class="deal-description">Intel i9, RTX 4070, 32GB RAM, 1TB SSD, 144Hz Display</p>
+                    <div class="deal-pricing">
+                        <span class="deal-current-price">$2,039</span>
+                        <span class="deal-original-price">$2,999</span>
+                    </div>
+                    <div class="deal-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">(478)</span>
+                    </div>
+                    <div class="stock-indicator">
+                        <div class="stock-bar">
+                            <div class="stock-fill" style="width: 45%;"></div>
+                        </div>
+                        <span class="stock-text">18 units in stock</span>
+                    </div>
+                    <button class="deal-btn" onclick="addDealToCart(event, 'Lenovo Legion Pro 7i', 2039)">Buy Now</button>
+                </div>
+            </div>
+
+            <!-- Deal 6: Bundle Offer -->
+            <div class="deal-card" data-deal-type="bundle">
+                <div class="deal-image">
+                    <img src="https://i.pcmag.com/imagery/reviews/01scwgubirsb8at9a7n8isi-38-hero-image-gallery.fit_lim.size_1050x591.v1569471105.jpg" alt="ASUS Bundle Deal">
+                    <div class="deal-badge bundle-badge">📦 BUNDLE OFFER</div>
+                    <button class="deal-wishlist" onclick="toggleDealWishlist(event)">♡</button>
+                </div>
+                <div class="deal-info">
+                    <h3 class="deal-product-name">ASUS ZenBook Pro + Suite</h3>
+                    <div class="deal-discount">
+                        <span class="discount-percent">-25%</span>
+                        <span class="discount-off">SAVE $625</span>
+                    </div>
+                    <p class="deal-description">Intel i7, 16GB RAM, 1TB SSD + OLED Monitor + Dock + Software</p>
+                    <div class="deal-pricing">
+                        <span class="deal-current-price">$1,875</span>
+                        <span class="deal-original-price">$2,500</span>
+                    </div>
+                    <div class="deal-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-count">(334)</span>
+                    </div>
+                    <div class="bundle-items">
+                        <span class="bundle-label">Includes:</span>
+                        <div class="bundle-list">
+                            <span>✓ Laptop</span>
+                            <span>✓ Monitor</span>
+                            <span>✓ Dock</span>
+                            <span>✓ Software</span>
+                        </div>
+                    </div>
+                    <button class="deal-btn" onclick="addDealToCart(event, 'ASUS ZenBook Pro Suite', 1875)">Buy Bundle</button>
+                </div>
+            </div>
+
+            <!-- Deal 7: Ultrabook Special -->
+            <div class="deal-card" data-deal-type="bundle">
+                <div class="deal-image">
+                    <img src="https://www.thebarcodewarehouse.co.uk/Images/Product/Default/xlarge/Samsung-Galaxy-Book4-360-Laptop-Front.jpg" alt="Samsung Galaxy Book 4">
+                    <div class="deal-badge bundle-badge">✨ ULTRABOOK</div>
+                    <button class="deal-wishlist" onclick="toggleDealWishlist(event)">♡</button>
+                </div>
+                <div class="deal-info">
+                    <h3 class="deal-product-name">Samsung Galaxy Book 4</h3>
+                    <div class="deal-discount">
+                        <span class="discount-percent">-18%</span>
+                        <span class="discount-off">SAVE $320</span>
+                    </div>
+                    <p class="deal-description">Intel i7, 16GB RAM, 512GB SSD, 14" AMOLED display</p>
+                    <div class="deal-pricing">
+                        <span class="deal-current-price">$1,449</span>
+                        <span class="deal-original-price">$1,769</span>
+                    </div>
+                    <div class="deal-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">(212)</span>
+                    </div>
+                    <div class="stock-indicator">
+                        <div class="stock-bar">
+                            <div class="stock-fill" style="width: 65%;"></div>
+                        </div>
+                        <span class="stock-text">Available now</span>
+                    </div>
+                    <button class="deal-btn" onclick="addDealToCart(event, 'Samsung Galaxy Book 4', 1449)">Buy Now</button>
+                </div>
+            </div>
+
+            <!-- Deal 8: Special Flash Sale -->
+            <div class="deal-card" data-deal-type="flash">
+                <div class="deal-image">
+                    <img src="https://laptopmedia.com/wp-content/uploads/2023/06/1-61-e1687786966446.jpg" alt="ROG Flow X13">
+                    <div class="deal-badge flash-badge">⚡ FLASH SALE</div>
+                    <button class="deal-wishlist" onclick="toggleDealWishlist(event)">♡</button>
+                </div>
+                <div class="deal-info">
+                    <h3 class="deal-product-name">ROG Flow X13</h3>
+                    <div class="deal-discount">
+                        <span class="discount-percent">-30%</span>
+                        <span class="discount-off">SAVE $600</span>
+                    </div>
+                    <p class="deal-description">AMD Ryzen 9, RTX 4060, 32GB RAM, 1TB SSD, 13.4" 120Hz</p>
+                    <div class="deal-pricing">
+                        <span class="deal-current-price">$1,399</span>
+                        <span class="deal-original-price">$1,999</span>
+                    </div>
+                    <div class="deal-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">(158)</span>
+                    </div>
+                    <div class="stock-indicator">
+                        <div class="stock-bar">
+                            <div class="stock-fill" style="width: 30%;"></div>
+                        </div>
+                        <span class="stock-text">Limited stock</span>
+                    </div>
+                    <button class="deal-btn" onclick="addDealToCart(event, 'ROG Flow X13', 1399)">Buy Now</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- View All Deals Button -->
+        <div class="view-all-deals">
+            <button class="view-all-btn" onclick="viewAllDeals()">View All Deals</button>
+        </div>
+    </div>
+</section>
+
+<!-- About Selection  -->
+
+
+<section id="about" class="about-section">
+    <div class="about-container">
+        
+        <!-- Column 1: Text Content -->
+        <div class="about-content">
+            <span class="subheading">About us</span>
+            <h2>កុំព្យូទ័រយួរដៃលំដាប់ប្រីមៀម <br>ឆ្លើយតបគ្រប់តម្រូវការ និងគោលដៅរបស់អ្នក។</h2>
+            <p>បង្កើតឡើងជាមួយបេសកកម្មដ៏ច្បាស់លាស់មួយ យើងចង់លុបបំបាត់រាល់ភាពស្មុគស្មាញក្នុងការជ្រើសរើសទិញកុំព្យូទ័រ។ មិនថាអ្នកជា Gamer ជំនាញផ្នែករចនា (Creative Professional) ឬជានិស្សិតនោះទេ ការស្វែងរកកុំព្យូទ័រយួរដៃដ៏ស័ក្តិសមបំផុត មិនគួរជាការទាយផ្សងសំណាងឡើយ។</p>
+            <p>យើងផ្សារភ្ជាប់បច្ចេកវិទ្យាដ៏ទំនើបចុងក្រោយ ទៅនឹងប្រសិទ្ធភាពការងារប្រចាំថ្ងៃរបស់អ្នក។ រាល់ម៉ាស៊ីនទាំងអស់នៅក្នុងហាងរបស់យើង ត្រូវបានឆ្លងកាត់ការពិនិត្យ និងតេស្តសមត្ថភាពគ្រឿងបន្លាស់ (Hardware) យ៉ាងម៉ត់ចត់បំផុត មុននឹងប្រគល់ជូនដល់ដៃអ្នក។</p>
+            
+            <!-- Quick Features -->
+            <div class="about-features">
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <p>ធានាគុណភាព និងសមត្ថភាពម៉ាស៊ីនពិតប្រាកដ</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <p>សេវាកម្មធានាឈានមុខគេ</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <p>មានក្រុមបច្ចេកទេសប្រឹក្សាយោបល់ឥតគិតថ្លៃអស់មួយជីវិត</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 2: Visual Graphic / Image -->
+        <div class="about-image-wrapper">
+            <div class="image-accent-box"></div>
+            <img src="https://dlcdnwebimgs.asus.com/files/media/601ee339-f392-4b62-87c3-972107bda726/v1/img/gaming/pd.jpg" alt="Modern Sleek Laptop" class="about-main-image">
+        </div>
+
+    </div>
+</section>
+
+<!-- Contact Selection -->
+<section id="contact" class="contact-section">
+    <div class="contact-wrapper">
+        <div class="contact-card">
+            <div class="leaf-top" aria-hidden="true"></div>
+            <div class="leaf-bottom" aria-hidden="true"></div>
+
+            <h2>Contact Us</h2>
+
+            <div class="contact-list">
+                <a class="contact-item" href="https://t.me/JangWuJi007" target="_blank" rel="noopener noreferrer">
+                    <div class="icon-box telegram-glow">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </div>
+                    <div class="contact-info">
+                        <span class="label">Telegram</span>
+                        <span class="value">@JangWuJi007</span>
+                    </div>
+                </a>
+
+                <a class="contact-item" href="https://www.facebook.com/ToroEmmSremm007/about/?fb_profile_edit_entry_point=%7B%22click_point%22%3A%22edit_profile_button%22%2C%22feature%22%3A%22profile_header%22%7D&id=100034485109311&sk=about" target="_blank" rel="noopener noreferrer">
+                    <div class="icon-box facebook-glow">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </div>
+                    <div class="contact-info">
+                        <span class="label">Facebook</span>
+                        <span class="value">/Kh_computer</span>
+                    </div>
+                </a>
+
+                <a class="contact-item" href="tel:+85517830021">
+                    <div class="icon-box phone-glow">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <div class="contact-info">
+                        <span class="label">Phone</span>
+                        <span class="value">+855 017 830 021</span>
+                    </div>
+                </a>
+
+                <a class="contact-item" href="https://maps.app.goo.gl/cv8greyX56igz9sE7" target="_blank" rel="noopener noreferrer">
+                    <div class="icon-box maps-glow">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div class="contact-info">
+                        <span class="label">Location</span>
+                        <span class="value-arrow">&rarr; Stueng mean chey</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="angkor-vector" aria-hidden="true"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer Sealeation -->
+
+<footer class="footer">
+
+    <div class="footer-wave"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-section footer-brand">
+            <a href="#home" class="footer-logo">KH COMPUTER</a>
+            <p class="footer-description">
+                Premium laptops for gaming, work, and creativity. Discover powerful performance with modern design.
+            </p>
+
+            <div class="footer-contact">
+                <span><i class="fas fa-map-marker-alt"></i> stueng meanchey, Phnom Penh</span>
+                <span><i class="fas fa-phone-alt"></i> +855 17 830 021</span>
+                <span><i class="fas fa-envelope"></i> info@khcomputer.com</span>
+            </div>
+
+            <div class="social-links">
+                <a href="https://www.facebook.com/ToroEmmSremm007" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://x.com/Kh_Computer007/about" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.google.com/search?q=ig&oq=ig&gs_lcrp=EgZjaHJvbWUqEggAEAAYQxiDARixAxiABBiKBTISCAAQABh
+                DGIMBGLEDGIAEGIoFMgwIARAAGEMYgAQYigUyEggCEC4YQxjHARjRAxiABBiKBTIMCAMQABhDGIAEGIoFMhIIBBAuGEMYxwEY0QMYgAQY
+                igUyDAgFEAAYQxiABBiKBTISCAYQLhhDGMcBGNEDGIAEGIoFMgwIBxAuGEMYgAQYigUyDAgIEC4YQxiABBiKBTIMCAkQLhhDGIAEGIoF0
+                gEHMzkyajBqN6gCALACAA&sourceid=chrome&ie=UTF-8" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@khcomputers" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-section">
+            <h4>Explore</h4>
+            <ul>
+                <li><a href="#products">Shop Laptops</a></li>
+                <li><a href="#deals">Latest Deals</a></li>
+                <li><a href="#products">Gaming Series</a></li>
+                <li><a href="#products">Ultrabooks</a></li>
+                <li><a href="#about">About Us</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Support</h4>
+            <ul>
+                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="#contact">Shipping</a></li>
+                <li><a href="#contact">Warranty</a></li>
+                <li><a href="#contact">FAQ</a></li>
+                <li><a href="#contact">Help Center</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section footer-newsletter">
+            <h4>Newsletter</h4>
+            <p class="newsletter-text">
+                Subscribe for exclusive laptop deals, launch alerts, and product tips.
+            </p>
+            <form class="newsletter-form" id="newsletterForm" onsubmit="event.preventDefault(); subscribeNewsletter();">
+                <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+            <div id="newsletterMessage" class="newsletter-message"></div>
+        </div>
+
+    </div>
+    </div>
+</footer>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
