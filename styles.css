@@ -142,59 +142,79 @@ button {
 
 /* ==================== LOGO ==================== */
 .logo-link {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 12px;
     text-decoration: none;
-    color: var(--nav-text);
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    transition: color 0.3s ease;
+    transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
-.logo-box {
-    width: 40px;
-    height: 40px;
-    background-color: #0f172a;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 20px;
-    border-radius: 8px;
-    transition: transform 0.25s ease, background 0.3s ease, box-shadow 0.3s ease;
+.navbar-logo-img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    flex-shrink: 0;
 }
 
-[data-theme="dark"] .logo-box,
-body.dark-theme .logo-box {
-    background: linear-gradient(135deg, #2563eb, #38bdf8);
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+.footer-logo-img {
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    flex-shrink: 0;
+}
+
+.logo-link:hover .navbar-logo-img,
+.footer-logo:hover .footer-logo-img {
+    transform: scale(1.08) rotate(-2deg);
 }
 
 .logo-text {
     display: flex;
     flex-direction: column;
-    line-height: 1.2;
+    justify-content: center;
+    line-height: 1.15;
 }
 
 .main-title {
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    font-size: 1.1rem;
-    color: var(--nav-text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    font-size: 1.25rem;
+    color: #0f172a;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1.1;
     transition: color 0.3s ease;
+}
+
+.brand-kh {
+    color: #f59e0b;
+    font-weight: 900;
+}
+
+[data-theme="dark"] .main-title,
+body.dark-theme .main-title {
+    color: #f8fafc;
 }
 
 .sub-title {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
+    font-weight: 800;
     letter-spacing: 2px;
-    color: var(--text-secondary);
+    color: #64748b;
     text-transform: uppercase;
+    margin-top: 2px;
     transition: color 0.3s ease;
 }
 
-.logo-link:hover .logo-box {
-    transform: scale(1.06);
+[data-theme="dark"] .sub-title,
+body.dark-theme .sub-title {
+    color: #94a3b8;
 }
 
 /* ==================== NAVIGATION MENU ==================== */
@@ -2582,12 +2602,11 @@ body {
 .footer-section { min-width: 0; }
 
 .footer-brand .footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   color: #fff;
   text-decoration: none;
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  display: inline-block;
   margin-bottom: 18px;
 }
 
