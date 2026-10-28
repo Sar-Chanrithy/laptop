@@ -363,10 +363,14 @@
         <div class="popular-container">
             <div class="popular-header">
                 <h2 class="popular-title" data-i18n="pop_title">POPULAR LAPTOPS</h2>
-                <a href="#products" class="popular-view-all"><span data-i18n="pop_view_all">VIEW ALL PRODUCTS</span> <i class="fa-solid fa-arrow-right"></i></a>
+                <div class="popular-header-actions">
+                    <button type="button" class="popular-nav-btn prev" onclick="scrollPopularGrid('prev')" aria-label="Previous Popular Laptops" title="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button type="button" class="popular-nav-btn next" onclick="scrollPopularGrid('next')" aria-label="Next Popular Laptops" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
+                    <a href="#products" class="popular-view-all"><span data-i18n="pop_view_all">VIEW ALL PRODUCTS</span> <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
             </div>
 
-            <div class="popular-grid">
+            <div class="popular-grid" id="popularGrid">
                 <!-- 1. Apple MacBook Air M3 -->
                 <div class="popular-card" onclick="openProductDetailById(101)" role="button" tabindex="0">
                     <div class="popular-image-box">

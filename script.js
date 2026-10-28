@@ -323,14 +323,9 @@ const navbar = document.querySelector('.navbar');
 
 window.addEventListener('scroll', () => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    // Add shadow on scroll
-    if (scrollTop > 0) {
-        navbar.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-    } else {
-        navbar.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+    if (navbar) {
+        navbar.classList.toggle('scrolled', scrollTop > 10);
     }
-    
     lastScrollTop = scrollTop;
 });
 
@@ -2741,6 +2736,27 @@ function scrollCategoryGrid(direction = 'next') {
     }
 }
 window.scrollCategoryGrid = scrollCategoryGrid;
+
+function scrollPopularGrid(direction = 'next') {
+    const grid = document.getElementById('popularGrid') || document.querySelector('.popular-grid');
+    if (!grid) return;
+    const scrollAmount = 240;
+    const maxScroll = Math.max(0, grid.scrollWidth - grid.clientWidth);
+    if (direction === 'prev') {
+        if (grid.scrollLeft <= 15) {
+            grid.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        } else {
+            grid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        }
+    } else {
+        if (grid.scrollLeft >= maxScroll - 15) {
+            grid.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+    }
+}
+window.scrollPopularGrid = scrollPopularGrid;
 
 // Bind keyboard support (Enter / Space) to category & popular cards
 document.addEventListener('DOMContentLoaded', () => {
