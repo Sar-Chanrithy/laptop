@@ -1396,8 +1396,43 @@
                             <input type="number" id="adminProdOriginalPrice" min="1" step="any" placeholder="e.g. 2199">
                         </div>
                         <div class="form-group full-width">
-                            <label><i class="fa-solid fa-image"></i> Laptop Image URL *</label>
-                            <input type="url" id="adminProdImage" placeholder="https://images.unsplash.com/photo-..." required>
+                            <label><i class="fa-solid fa-image"></i> Laptop Image *</label>
+                            <div class="image-source-tabs">
+                                <button type="button" class="img-tab-btn active" id="tabAddFile" onclick="switchImageSourceTab('file', 'add')">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i> Upload From Device
+                                </button>
+                                <button type="button" class="img-tab-btn" id="tabAddUrl" onclick="switchImageSourceTab('url', 'add')">
+                                    <i class="fa-solid fa-link"></i> Image URL / Path
+                                </button>
+                            </div>
+                            <div class="image-dropzone-container" id="addDropzoneContainer" onclick="triggerFileInput('add')">
+                                <input type="file" id="adminProdFileInput" accept="image/*" style="display: none;" onchange="handleImageFileSelect(event, 'add')">
+                                <div class="dropzone-idle" id="addDropzoneIdle">
+                                    <div class="dropzone-icon-circle">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                                    </div>
+                                    <div class="dropzone-text-group">
+                                        <p class="dropzone-main-text"><strong>Click to browse</strong> or drag &amp; drop laptop image</p>
+                                        <span class="dropzone-sub-text">PNG, JPG, WebP, GIF supported (Auto-compressed)</span>
+                                    </div>
+                                </div>
+                                <div class="dropzone-preview" id="addDropzonePreview" style="display: none;">
+                                    <div class="preview-thumbnail-wrap">
+                                        <img id="addPreviewImg" src="" alt="Laptop Preview">
+                                    </div>
+                                    <div class="preview-meta-wrap">
+                                        <span class="preview-name" id="addPreviewName">laptop-image.png</span>
+                                        <span class="preview-size" id="addPreviewSize">Image ready</span>
+                                        <button type="button" class="preview-change-btn" onclick="event.stopPropagation(); triggerFileInput('add')">
+                                            <i class="fa-solid fa-rotate"></i> Change File
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="image-url-container" id="addUrlContainer" style="display: none;">
+                                <input type="text" id="adminProdImage" placeholder="https://images.unsplash.com/... or image/laptop/..." oninput="handleImageUrlChange(this.value, 'add')">
+                            </div>
+                            <input type="hidden" id="adminProdFinalImage">
                         </div>
                         <div class="form-group full-width">
                             <label><i class="fa-solid fa-align-left"></i> Summary Description *</label>
@@ -1535,8 +1570,43 @@
                         <input type="number" id="editProdOriginalPrice" step="any">
                     </div>
                     <div class="form-group full-width">
-                        <label>Image URL</label>
-                        <input type="url" id="editProdImage" required>
+                        <label><i class="fa-solid fa-image"></i> Laptop Image *</label>
+                        <div class="image-source-tabs">
+                            <button type="button" class="img-tab-btn active" id="tabEditFile" onclick="switchImageSourceTab('file', 'edit')">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Upload From Device
+                            </button>
+                            <button type="button" class="img-tab-btn" id="tabEditUrl" onclick="switchImageSourceTab('url', 'edit')">
+                                <i class="fa-solid fa-link"></i> Image URL / Path
+                            </button>
+                        </div>
+                        <div class="image-dropzone-container" id="editDropzoneContainer" onclick="triggerFileInput('edit')">
+                            <input type="file" id="editProdFileInput" accept="image/*" style="display: none;" onchange="handleImageFileSelect(event, 'edit')">
+                            <div class="dropzone-idle" id="editDropzoneIdle" style="display: none;">
+                                <div class="dropzone-icon-circle">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                                </div>
+                                <div class="dropzone-text-group">
+                                    <p class="dropzone-main-text"><strong>Click to browse</strong> or drag &amp; drop laptop image</p>
+                                    <span class="dropzone-sub-text">PNG, JPG, WebP, GIF supported (Auto-compressed)</span>
+                                </div>
+                            </div>
+                            <div class="dropzone-preview" id="editDropzonePreview">
+                                <div class="preview-thumbnail-wrap">
+                                    <img id="editPreviewImg" src="" alt="Laptop Preview">
+                                </div>
+                                <div class="preview-meta-wrap">
+                                    <span class="preview-name" id="editPreviewName">Current Image</span>
+                                    <span class="preview-size" id="editPreviewSize">Ready to save</span>
+                                    <button type="button" class="preview-change-btn" onclick="event.stopPropagation(); triggerFileInput('edit')">
+                                        <i class="fa-solid fa-rotate"></i> Change File
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="image-url-container" id="editUrlContainer" style="display: none;">
+                            <input type="text" id="editProdImage" placeholder="https://... or image/laptop/..." oninput="handleImageUrlChange(this.value, 'edit')">
+                        </div>
+                        <input type="hidden" id="editProdFinalImage">
                     </div>
                     <div class="form-group full-width">
                         <label>Description</label>

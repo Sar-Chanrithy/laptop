@@ -3127,13 +3127,189 @@ function renderAdminOrdersTable() {
     tbody.innerHTML = html;
 }
 
+// ==================== ADMIN IMAGE FILE UPLOAD HELPERS ====================
+function triggerFileInput(mode) {
+    const fileInput = document.getElementById(mode === 'edit' ? 'editProdFileInput' : 'adminProdFileInput');
+    if (fileInput) fileInput.click();
+}
+window.triggerFileInput = triggerFileInput;
+
+function switchImageSourceTab(tabType, mode) {
+    const isEdit = mode === 'edit';
+    const tabFileBtn = document.getElementById(isEdit ? 'tabEditFile' : 'tabAddFile');
+    const tabUrlBtn = document.getElementById(isEdit ? 'tabEditUrl' : 'tabAddUrl');
+    const dropzoneContainer = document.getElementById(isEdit ? 'editDropzoneContainer' : 'addDropzoneContainer');
+    const urlContainer = document.getElementById(isEdit ? 'editUrlContainer' : 'addUrlContainer');
+
+    if (tabType === 'file') {
+        if (tabFileBtn) tabFileBtn.classList.add('active');
+        if (tabUrlBtn) tabUrlBtn.classList.remove('active');
+        if (dropzoneContainer) dropzoneContainer.style.display = 'flex';
+        if (urlContainer) urlContainer.style.display = 'none';
+    } else {
+        if (tabFileBtn) tabFileBtn.classList.remove('active');
+        if (tabUrlBtn) tabUrlBtn.classList.add('active');
+        if (dropzoneContainer) dropzoneContainer.style.display = 'none';
+        if (urlContainer) urlContainer.style.display = 'block';
+    }
+}
+window.switchImageSourceTab = switchImageSourceTab;
+
+function handleImageFileSelect(event, mode) {
+    const file = event.target.files && event.target.files[0];
+    if (file) {
+        processUploadedImage(file, mode);
+    }
+}
+window.handleImageFileSelect = handleImageFileSelect;
+
+function handleImageUrlChange(value, mode) {
+    const isEdit = mode === 'edit';
+    const finalInput = document.getElementById(isEdit ? 'editProdFinalImage' : 'adminProdFinalImage');
+    if (finalInput) finalInput.value = value.trim();
+
+    const previewImg = document.getElementById(isEdit ? 'editPreviewImg' : 'addPreviewImg');
+    const dropzoneIdle = document.getElementById(isEdit ? 'editDropzoneIdle' : 'addDropzoneIdle');
+    const dropzonePreview = document.getElementById(isEdit ? 'editDropzonePreview' : 'addDropzonePreview');
+    const previewName = document.getElementById(isEdit ? 'editPreviewName' : 'addPreviewName');
+
+    if (value.trim()) {
+        if (previewImg) previewImg.src = value.trim();
+        if (previewName) previewName.textContent = 'Linked Image';
+        if (dropzoneIdle) dropzoneIdle.style.display = 'none';
+        if (dropzonePreview) dropzonePreview.style.display = 'flex';
+    }
+}
+window.handleImageUrlChange = handleImageUrlChange;
+
+function processUploadedImage(file, mode) {
+    if (!file || !file.type.startsWith('image/')) {
+        if (typeof showNotification === 'function') {
+            showNotification('Please select a valid image file (PNG, JPG, WebP)!', 3000);
+        }
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const rawData = e.target.result;
+        const img = new Image();
+        img.onload = function() {
+            // Downscale to max 900px to ensure it fits safely in localStorage
+            const maxDim = 900;
+            let width = img.width;
+            let height = img.height;
+            if (width > maxDim || height > maxDim) {
+                if (width > height) {
+                    height = Math.round((height * maxDim) / width);
+                    width = maxDim;
+                } else {
+                    width = Math.round((width * maxDim) / height);
+                    height = maxDim;
+                }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+            const optimizedDataUrl = canvas.toDataURL(mime, 0.85);
+
+            applyImageToForm(optimizedDataUrl, file.name, mode);
+        };
+        img.onerror = function() {
+            applyImageToForm(rawData, file.name, mode);
+        };
+        img.src = rawData;
+    };
+    reader.readAsDataURL(file);
+}
+
+function applyImageToForm(dataUrl, fileName, mode) {
+    const isEdit = mode === 'edit';
+    const textInput = document.getElementById(isEdit ? 'editProdImage' : 'adminProdImage');
+    const finalInput = document.getElementById(isEdit ? 'editProdFinalImage' : 'adminProdFinalImage');
+    const previewImg = document.getElementById(isEdit ? 'editPreviewImg' : 'addPreviewImg');
+    const previewName = document.getElementById(isEdit ? 'editPreviewName' : 'addPreviewName');
+    const previewSize = document.getElementById(isEdit ? 'editPreviewSize' : 'addPreviewSize');
+    const dropzoneIdle = document.getElementById(isEdit ? 'editDropzoneIdle' : 'addDropzoneIdle');
+    const dropzonePreview = document.getElementById(isEdit ? 'editDropzonePreview' : 'addDropzonePreview');
+
+    if (textInput) textInput.value = dataUrl;
+    if (finalInput) finalInput.value = dataUrl;
+    if (previewImg) previewImg.src = dataUrl;
+    if (previewName) previewName.textContent = fileName || 'Selected File';
+    if (previewSize) previewSize.textContent = 'Ready to save';
+
+    if (dropzoneIdle) dropzoneIdle.style.display = 'none';
+    if (dropzonePreview) dropzonePreview.style.display = 'flex';
+
+    if (typeof showNotification === 'function') {
+        showNotification('Image loaded successfully! 📸', 2000);
+    }
+}
+
+function resetImageUpload(mode) {
+    const isEdit = mode === 'edit';
+    const textInput = document.getElementById(isEdit ? 'editProdImage' : 'adminProdImage');
+    const finalInput = document.getElementById(isEdit ? 'editProdFinalImage' : 'adminProdFinalImage');
+    const fileInput = document.getElementById(isEdit ? 'editProdFileInput' : 'adminProdFileInput');
+    const dropzoneIdle = document.getElementById(isEdit ? 'editDropzoneIdle' : 'addDropzoneIdle');
+    const dropzonePreview = document.getElementById(isEdit ? 'editDropzonePreview' : 'addDropzonePreview');
+    const previewImg = document.getElementById(isEdit ? 'editPreviewImg' : 'addPreviewImg');
+
+    if (textInput) textInput.value = '';
+    if (finalInput) finalInput.value = '';
+    if (fileInput) fileInput.value = '';
+    if (previewImg) previewImg.src = '';
+    if (dropzoneIdle) dropzoneIdle.style.display = 'flex';
+    if (dropzonePreview) dropzonePreview.style.display = 'none';
+    switchImageSourceTab('file', mode);
+}
+window.resetImageUpload = resetImageUpload;
+
+function initImageDropzones() {
+    ['add', 'edit'].forEach(mode => {
+        const container = document.getElementById(mode === 'edit' ? 'editDropzoneContainer' : 'addDropzoneContainer');
+        if (!container) return;
+        ['dragenter', 'dragover'].forEach(eventName => {
+            container.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                container.classList.add('dragover');
+            });
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            container.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                container.classList.remove('dragover');
+            });
+        });
+        container.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt && dt.files;
+            if (files && files[0]) {
+                processUploadedImage(files[0], mode);
+            }
+        });
+    });
+}
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initImageDropzones);
+} else {
+    initImageDropzones();
+}
+
 function handleAdminAddProduct() {
     const name = document.getElementById('adminProdName')?.value.trim();
     const category = document.getElementById('adminProdCategory')?.value;
     const badge = document.getElementById('adminProdBadge')?.value;
     const price = parseFloat(document.getElementById('adminProdPrice')?.value);
     const originalPrice = document.getElementById('adminProdOriginalPrice')?.value ? parseFloat(document.getElementById('adminProdOriginalPrice').value) : null;
-    const image = document.getElementById('adminProdImage')?.value.trim();
+    const image = (document.getElementById('adminProdFinalImage')?.value || document.getElementById('adminProdImage')?.value || '').trim();
     const desc = document.getElementById('adminProdDesc')?.value.trim();
 
     const specCPU = document.getElementById('adminSpecCPU')?.value.trim();
@@ -3144,7 +3320,7 @@ function handleAdminAddProduct() {
     const specWeight = document.getElementById('adminSpecWeight')?.value.trim();
 
     if (!name || !category || isNaN(price) || !image || !desc) {
-        showNotification('Please fill in all required fields marked with *', 3500);
+        showNotification('Please fill in all required fields and upload or enter an image (*)', 3500);
         return;
     }
 
@@ -3177,6 +3353,7 @@ function handleAdminAddProduct() {
     renderAdminProductsTable();
 
     document.getElementById('adminAddProductForm')?.reset();
+    resetImageUpload('add');
     showNotification(`Laptop "${name}" added to store! 🎉`, 3500);
     switchAdminTab(null, 'manageProducts');
 }
@@ -3207,7 +3384,27 @@ function openEditProductModal(productId) {
     document.getElementById('editProdBadge').value = prod.badge || '';
     document.getElementById('editProdPrice').value = prod.price;
     document.getElementById('editProdOriginalPrice').value = prod.originalPrice || '';
-    document.getElementById('editProdImage').value = prod.image;
+    
+    const currentImg = prod.image || '';
+    document.getElementById('editProdImage').value = currentImg;
+    const editFinalInput = document.getElementById('editProdFinalImage');
+    if (editFinalInput) editFinalInput.value = currentImg;
+
+    const editPreviewImg = document.getElementById('editPreviewImg');
+    const editDropzoneIdle = document.getElementById('editDropzoneIdle');
+    const editDropzonePreview = document.getElementById('editDropzonePreview');
+    const editPreviewName = document.getElementById('editPreviewName');
+    if (currentImg && editPreviewImg) {
+        editPreviewImg.src = currentImg;
+        if (editPreviewName) editPreviewName.textContent = prod.name ? `${prod.name}.png` : 'Current Image';
+        if (editDropzoneIdle) editDropzoneIdle.style.display = 'none';
+        if (editDropzonePreview) editDropzonePreview.style.display = 'flex';
+    } else {
+        if (editDropzoneIdle) editDropzoneIdle.style.display = 'flex';
+        if (editDropzonePreview) editDropzonePreview.style.display = 'none';
+    }
+    switchImageSourceTab('file', 'edit');
+
     document.getElementById('editProdDesc').value = prod.description;
 
     const specs = prod.specs || {};
@@ -3237,7 +3434,7 @@ function saveEditedProduct() {
     const badge = document.getElementById('editProdBadge').value;
     const price = parseFloat(document.getElementById('editProdPrice').value);
     const originalPrice = document.getElementById('editProdOriginalPrice').value ? parseFloat(document.getElementById('editProdOriginalPrice').value) : null;
-    const image = document.getElementById('editProdImage').value.trim();
+    const image = (document.getElementById('editProdFinalImage')?.value || document.getElementById('editProdImage')?.value || '').trim();
     const desc = document.getElementById('editProdDesc').value.trim();
 
     const specCPU = document.getElementById('editSpecCPU').value.trim();
