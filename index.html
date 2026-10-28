@@ -82,6 +82,17 @@
                         <i class="fa-solid fa-shield-halved"></i> <span data-i18n="nav_admin">Admin</span>
                     </a>
                 </li>
+                <li class="nav-item mobile-only-nav-item">
+                    <a href="#favorites" class="nav-link" onclick="event.preventDefault(); openFavorites(); closeMobileMenu();">
+                        <span><i class="fa-solid fa-heart" style="color: #ec4899; margin-right: 8px;"></i> Favorites</span>
+                    </a>
+                </li>
+                <li class="nav-item mobile-only-nav-item">
+
+                    <a href="#account" class="nav-link" onclick="closeMobileMenu();">
+                        <span><i class="fa-solid fa-user" style="color: #38bdf8; margin-right: 8px;"></i> Account</span>
+                    </a>
+                </li>
             </ul>
 
             <!-- Right Side Icons -->
@@ -169,29 +180,29 @@
                 <div class="trust-item">
                     <div class="trust-icon"><i class="fa-solid fa-bolt"></i></div>
                     <div class="trust-text">
-                        <strong>Innovative Tech</strong>
-                        <span>Next-Gen Performance</span>
+                        <strong data-i18n="trust_tech_title">Innovative Tech</strong>
+                        <span data-i18n="trust_tech_sub">Next-Gen Performance</span>
                     </div>
                 </div>
                 <div class="trust-item">
                     <div class="trust-icon"><i class="fa-solid fa-shield-halved"></i></div>
                     <div class="trust-text">
-                        <strong>Trusted Quality</strong>
-                        <span>100% Genuine Warranty</span>
+                        <strong data-i18n="trust_quality_title">Trusted Quality</strong>
+                        <span data-i18n="trust_quality_sub">100% Genuine Warranty</span>
                     </div>
                 </div>
                 <div class="trust-item">
                     <div class="trust-icon"><i class="fa-solid fa-truck-fast"></i></div>
                     <div class="trust-text">
-                        <strong>Faster Delivery</strong>
-                        <span>Free on orders over $89</span>
+                        <strong data-i18n="trust_delivery_title">Faster Delivery</strong>
+                        <span data-i18n="trust_delivery_sub">Free on orders over $89</span>
                     </div>
                 </div>
                 <div class="trust-item">
                     <div class="trust-icon"><i class="fa-solid fa-lock"></i></div>
                     <div class="trust-text">
-                        <strong>Secure Payment</strong>
-                        <span>100% Safe & Encrypted</span>
+                        <strong data-i18n="trust_payment_title">Secure Payment</strong>
+                        <span data-i18n="trust_payment_sub">100% Safe & Encrypted</span>
                     </div>
                 </div>
             </div>

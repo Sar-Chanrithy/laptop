@@ -116,6 +116,14 @@ const translations = {
         filter_workstation: 'Workstations',
         btn_add_cart: 'Add to Cart',
         btn_buy_now: 'Buy Now',
+        trust_tech_title: 'Innovative Tech',
+        trust_tech_sub: 'Next-Gen Performance',
+        trust_quality_title: 'Trusted Quality',
+        trust_quality_sub: '100% Genuine Warranty',
+        trust_delivery_title: 'Faster Delivery',
+        trust_delivery_sub: 'Free on orders over $89',
+        trust_payment_title: 'Secure Payment',
+        trust_payment_sub: '100% Safe & Encrypted',
         toast_en: '🇬🇧 Switched to English',
         toast_kh: '🇰🇭 បានប្តូរទៅជា ភាសាខ្មែរ'
     },
@@ -152,6 +160,14 @@ const translations = {
         filter_workstation: 'Workstations',
         btn_add_cart: 'ដាក់ចូលកន្ត្រក',
         btn_buy_now: 'ទិញភ្លាមៗ',
+        trust_tech_title: 'បច្ចេកវិទ្យាទំនើប',
+        trust_tech_sub: 'សមត្ថភាពជំនាន់ក្រោយ',
+        trust_quality_title: 'គុណភាពជឿទុកចិត្ត',
+        trust_quality_sub: 'ធានាសុទ្ធ ១០០%',
+        trust_delivery_title: 'ដឹកជញ្ជូនរហ័ស',
+        trust_delivery_sub: 'ឥតគិតថ្លៃលើសពី $89',
+        trust_payment_title: 'ទូទាត់សុវត្ថិភាព',
+        trust_payment_sub: 'សុវត្ថិភាពខ្ពស់ ១០០%',
         toast_en: '🇬🇧 Switched to English',
         toast_kh: '🇰🇭 បានប្តូរទៅជា ភាសាខ្មែរ'
     }
@@ -259,6 +275,14 @@ navLinks.forEach(link => {
         }
     });
 });
+
+function closeMobileMenu() {
+    if (hamburgerMenu && hamburgerMenu.classList.contains('active')) {
+        hamburgerMenu.classList.remove('active');
+        navMenu.classList.remove('active');
+    }
+}
+window.closeMobileMenu = closeMobileMenu;
 
 // ==================== DROPDOWN MENU TOGGLE (MOBILE) ====================
 dropdowns.forEach(dropdown => {
