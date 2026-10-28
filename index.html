@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KH Computer - Premium Laptops Store</title>
+    <!-- Google Fonts: Inter (English) & Kantumruy Pro (Khmer) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="image/logo.png">
@@ -14,6 +18,9 @@
             if (theme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
             }
+            var savedLang = localStorage.getItem('kh_language') || 'en';
+            document.documentElement.setAttribute('data-lang', savedLang);
+            document.documentElement.setAttribute('lang', savedLang === 'kh' ? 'km' : 'en');
         })();
     </script>
 
@@ -42,41 +49,49 @@
             <!-- Navigation Menu -->
             <ul class="nav-menu" id="navMenu">
                 <li class="nav-item">
-                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#home" class="nav-link" data-i18n="nav_home">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a href="#products" class="nav-link dropdown-toggle">
+                    <a href="#products" class="nav-link dropdown-toggle" data-i18n="nav_products">
                         Products
                         <span class="dropdown-arrow">▼</span>
                     </a>
                     <div class="dropdown-menu">
-                        <a href="#products" class="dropdown-item" data-filter="gaming">Gaming Laptops</a>
-                        <a href="#products" class="dropdown-item" data-filter="business">Business Laptops</a>
-                        <a href="#products" class="dropdown-item" data-filter="ultrabook">Ultrabooks</a>
-                        <a href="#products" class="dropdown-item" data-filter="budget">Budget Friendly</a>
+                        <a href="#products" class="dropdown-item" data-filter="ultrabook" data-i18n="cat_ultrabooks">Ultrabooks</a>
+                        <a href="#products" class="dropdown-item" data-filter="gaming" data-i18n="cat_gaming">Gaming Laptops</a>
+                        <a href="#products" class="dropdown-item" data-filter="business" data-i18n="cat_business">Business Laptops</a>
+                        <a href="#products" class="dropdown-item" data-filter="2in1" data-i18n="cat_2in1">2-in-1 Laptops</a>
+                        <a href="#products" class="dropdown-item" data-filter="budget" data-i18n="cat_student">Student Laptops</a>
+                        <a href="#products" class="dropdown-item" data-filter="workstation" data-i18n="cat_workstation">Workstations</a>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a href="#products" class="nav-link">Brands</a>
+                    <a href="#top-brands" class="nav-link" data-i18n="nav_brands">Brands</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#deals" class="nav-link">Deals</a>
+                    <a href="#deals" class="nav-link" data-i18n="nav_deals">Deals</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#about" class="nav-link">About</a>
+                    <a href="#about" class="nav-link" data-i18n="nav_about">About</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#contact" class="nav-link">Contact</a>
+                    <a href="#contact" class="nav-link" data-i18n="nav_contact">Contact</a>
                 </li>
                 <li class="nav-item admin-nav-item" id="adminNavItem" style="display: none;">
                     <a href="#admin" class="nav-link admin-nav-link" onclick="event.preventDefault(); openAdminDashboard();">
-                        <i class="fa-solid fa-shield-halved"></i> Admin
+                        <i class="fa-solid fa-shield-halved"></i> <span data-i18n="nav_admin">Admin</span>
                     </a>
                 </li>
             </ul>
 
             <!-- Right Side Icons -->
             <div class="navbar-right">
+                <!-- Clean Sliding Pill Language Switcher (EN | ខ្មែរ) -->
+                <div class="lang-switch-pill" id="langSwitcher" role="group" aria-label="Language Selector">
+                    <button type="button" class="lang-pill-btn active" id="langBtnEn" onclick="setLanguage('en')" title="English">EN</button>
+                    <button type="button" class="lang-pill-btn" id="langBtnKh" onclick="setLanguage('kh')" title="ភាសាខ្មែរ">ខ្មែរ</button>
+                </div>
+
                 <button type="button" class="icon-btn theme-toggle-btn" id="themeToggleBtn" title="Switch to Dark Mode" aria-label="Toggle Light and Dark Mode">
                     <i class="fa-solid fa-moon" id="themeToggleIcon"></i>
                 </button>
@@ -100,23 +115,369 @@
 
     
  
-    <!-- Hero Section -->
+    <!-- Hero Banner Section (New Generation Tech / ROG Dual Screen Flagship) -->
     <section class="hero" id="home">
-        <div class="hero-wrapper">
-            <div class="hero-content">
-                <div class="hero-badge"> Discover Our Collection</div>
-                <h1>Welcome to KH COMPUTER</h1>
-                <p>Find your perfect laptop from top brands with trusted support, quality service, and great value.</p>
-                <div class="hero-actions">
-                    <a href="#products" class="cta-button">Shop Now</a>
-                    <a href="#products" class="hero-link">View Products</a>
+        <div class="hero-container">
+            <div class="hero-grid">
+                <!-- Left: Headline & Call-to-Actions -->
+                <div class="hero-content">
+                    <span class="hero-tag-pill"><i class="fa-solid fa-bolt"></i> <span data-i18n="hero_tag">NEXT GENERATION TECH</span></span>
+                    <h1 class="hero-title" data-i18n="hero_title">
+                        Smarter Devices.<br>
+                        <span class="hero-title-accent">Limitless Power.</span>
+                    </h1>
+                    <p class="hero-desc" data-i18n="hero_desc">
+                        Discover innovative electronics and groundbreaking dual-screen performance engineered to power your life, work, and play without limits.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#products" class="hero-btn-primary">
+                            <span data-i18n="hero_shop_now">Shop Now</span> <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#products" class="hero-btn-secondary" data-i18n="hero_explore">
+                            Explore Models
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Modern Laptop Visual + Floating Badges -->
+                <div class="hero-visual">
+                    <!-- Top Floating Deal Badge -->
+                    <div class="hero-floating-badge badge-deal" title="Up to 25% Off Deal">
+                        <span class="badge-dot"></span>
+                        <i class="fa-solid fa-fire"></i>
+                        <span>UP TO <strong>25% OFF</strong></span>
+                    </div>
+
+                    <!-- Laptop Visual Composition -->
+                    <div class="hero-laptop-composition">
+                        <div class="laptop-glow-backdrop"></div>
+                        <img src="image/laptop/banner.png"
+                             onerror="this.onerror=null; this.src='image/hero-rog.png'"
+                             alt="Dual Screen ROG Flagship Laptop" class="hero-main-laptop">
+                    </div>
+
+                    <!-- Bottom Floating Spec Badge -->
+                    <div class="hero-floating-badge badge-spec" title="Dual Screen Flagship">
+                        <i class="fa-solid fa-microchip"></i>
+                        <span>Dual Screen · ROG Flagship</span>
+                    </div>
                 </div>
             </div>
- 
-            <div class="hero-visual">
-                <div class="hero-device">
-                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=900&q=80"
-                     alt="Modern laptop" class="hero-laptop-img">
+
+            <!-- Bottom: Trust & Feature Bar -->
+            <div class="hero-trust-bar">
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="trust-text">
+                        <strong>Innovative Tech</strong>
+                        <span>Next-Gen Performance</span>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="trust-text">
+                        <strong>Trusted Quality</strong>
+                        <span>100% Genuine Warranty</span>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                    <div class="trust-text">
+                        <strong>Faster Delivery</strong>
+                        <span>Free on orders over $89</span>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fa-solid fa-lock"></i></div>
+                    <div class="trust-text">
+                        <strong>Secure Payment</strong>
+                        <span>100% Safe & Encrypted</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SHOP BY CATEGORY SECTION ==================== -->
+    <section class="shop-by-category-section" id="categories">
+        <div class="category-section-container">
+            <div class="category-section-header">
+                <h2 class="category-main-title" data-i18n="section_category">SHOP BY CATEGORY</h2>
+                <div class="category-blue-pill"></div>
+            </div>
+
+            <div class="category-carousel-wrapper">
+                <!-- Prev button arrow -->
+                <button class="cat-scroll-prev-btn" onclick="scrollCategoryGrid('prev')" title="Previous categories" aria-label="Previous categories">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <div class="category-cards-grid" id="categoryCardsGrid">
+                    <!-- 1. Ultrabooks -->
+                    <div class="category-card" onclick="openCategoryProductDetail('ultrabook', this)" role="button" tabindex="0" title="Click to view product details">
+                        <div class="cat-image-box">
+                            <img src="image/laptop/ASUS Zenbook 14 OLED (UX3405).png" alt="Ultrabooks" onerror="this.onerror=null; this.src='image/cat-ultrabook.png'">
+                        </div>
+                        <h3 class="cat-card-title">Ultrabooks</h3>
+                        <p class="cat-card-sub">Lightweight &amp; Thin</p>
+                        <span class="cat-view-detail-hint"><i class="fa-solid fa-eye"></i> View Details</span>
+                    </div>
+
+                    <!-- 2. Gaming Laptops -->
+                    <div class="category-card" onclick="openCategoryProductDetail('gaming', this)" role="button" tabindex="0" title="Click to view product details">
+                        <div class="cat-image-box">
+                            <img src="image/laptop/ASUS ROG Strix G16.png" alt="Gaming Laptops" onerror="this.onerror=null; this.src='image/cat-gaming.png'">
+                        </div>
+                        <h3 class="cat-card-title">Gaming Laptops</h3>
+                        <p class="cat-card-sub">High Performance</p>
+                        <span class="cat-view-detail-hint"><i class="fa-solid fa-eye"></i> View Details</span>
+                    </div>
+
+                    <!-- 3. Business Laptops -->
+                    <div class="category-card" onclick="openCategoryProductDetail('business', this)" role="button" tabindex="0" title="Click to view product details">
+                        <div class="cat-image-box">
+                            <img src="image/laptop/Lenovo ThinkPad X1 Carbon Gen 13.png" alt="Business Laptops" onerror="this.onerror=null; this.src='image/cat-business.png'">
+                        </div>
+                        <h3 class="cat-card-title">Business Laptops</h3>
+                        <p class="cat-card-sub">Power &amp; Productivity</p>
+                        <span class="cat-view-detail-hint"><i class="fa-solid fa-eye"></i> View Details</span>
+                    </div>
+
+                    <!-- 4. 2-in-1 Laptops -->
+                    <div class="category-card" onclick="openCategoryProductDetail('2in1', this)" role="button" tabindex="0" title="Click to view product details">
+                        <div class="cat-image-box">
+                            <img src="image/laptop/HP Spectre x360 14.png" alt="2-in-1 Laptops" onerror="this.onerror=null; this.src='image/cat-2in1.png'">
+                        </div>
+                        <h3 class="cat-card-title">2-in-1 Laptops</h3>
+                        <p class="cat-card-sub">Versatile &amp; Flexible</p>
+                        <span class="cat-view-detail-hint"><i class="fa-solid fa-eye"></i> View Details</span>
+                    </div>
+
+                    <!-- 5. Student Laptops -->
+                    <div class="category-card" onclick="openCategoryProductDetail('budget', this)" role="button" tabindex="0" title="Click to view product details">
+                        <div class="cat-image-box">
+                            <img src="image/laptop/ASUS Vivobook 15.png" alt="Student Laptops" onerror="this.onerror=null; this.src='image/cat-student.png'">
+                        </div>
+                        <h3 class="cat-card-title">Student Laptops</h3>
+                        <p class="cat-card-sub">Study Smart</p>
+                        <span class="cat-view-detail-hint"><i class="fa-solid fa-eye"></i> View Details</span>
+                    </div>
+
+                    <!-- 6. Workstations -->
+                    <div class="category-card" onclick="openCategoryProductDetail('workstation', this)" role="button" tabindex="0" title="Click to view product details">
+                        <div class="cat-image-box">
+                            <img src="image/laptop/Dell Precision 7680.png" alt="Workstations" onerror="this.onerror=null; this.src='image/cat-workstation.png'">
+                        </div>
+                        <h3 class="cat-card-title">Workstations</h3>
+                        <p class="cat-card-sub">Built for Professionals</p>
+                        <span class="cat-view-detail-hint"><i class="fa-solid fa-eye"></i> View Details</span>
+                    </div>
+                </div>
+
+                <!-- Next button arrow -->
+                <button class="cat-scroll-next-btn" onclick="scrollCategoryGrid('next')" title="Scroll categories" aria-label="Next categories">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== BEST DEALS ON TOP BRANDS BANNER ==================== -->
+    <section class="top-brands-deals-section" id="top-brands">
+        <div class="top-brands-container">
+            <div class="brands-banner-card">
+                <!-- Left: Headline & Call To Action -->
+                <div class="brands-col-left">
+                    <span class="offer-badge-tag">LIMITED TIME OFFER</span>
+                    <h2 class="brands-banner-heading">
+                        Best Deals on<br>
+                        Top <span class="accent-brands">Brands</span>
+                    </h2>
+                    <p class="brands-banner-desc">
+                        Grab exciting offers on premium laptops from leading brands.
+                    </p>
+                    <a href="#deals" class="brands-banner-btn">
+                        VIEW ALL DEALS <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Center: Center Laptop with Glowing Neon Ring -->
+                <div class="brands-col-center">
+                    <div class="neon-glow-backdrop"></div>
+                    <div class="neon-circle-ring"></div>
+                    <img src="image/deals-center-laptop.png"
+                         onerror="this.onerror=null; this.src='image/hero-laptop.png'"
+                         alt="Best Deals Laptop"
+                         class="deals-showcase-laptop">
+                </div>
+
+                <!-- Right: Brand Logos Grid + 30% OFF Callout -->
+                <div class="brands-col-right">
+                    <!-- 6 Brands Grid: Dell, HP, Lenovo, ASUS, Acer, MSI -->
+                    <div class="top-brand-logos-grid">
+                        <div class="brand-item-box brand-dell" title="Dell">
+                            <span class="brand-badge-circle">DELL</span>
+                        </div>
+                        <div class="brand-item-box brand-hp" title="HP">
+                            <span class="brand-badge-circle hp-circle">hp</span>
+                        </div>
+                        <div class="brand-item-box brand-lenovo" title="Lenovo">
+                            <span class="brand-badge-rect">Lenovo</span>
+                        </div>
+                        <div class="brand-item-box brand-asus" title="ASUS">
+                            <span class="brand-text-logo asus-logo">ASUS</span>
+                        </div>
+                        <div class="brand-item-box brand-acer" title="Acer">
+                            <span class="brand-text-logo acer-logo">acer</span>
+                        </div>
+                        <div class="brand-item-box brand-msi" title="MSI">
+                            <span class="brand-text-logo msi-logo"><i class="fa-solid fa-dragon"></i> msi</span>
+                        </div>
+                    </div>
+
+                    <!-- Discount Callout Badge -->
+                    <div class="brands-discount-callout">
+                        <span class="callout-sub">UP TO</span>
+                        <span class="callout-number">30%</span>
+                        <span class="callout-off">OFF</span>
+                        <span class="callout-desc">On Selected Laptops</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== POPULAR LAPTOPS SECTION ==================== -->
+    <section class="popular-laptops-section" id="popular-laptops">
+        <div class="popular-container">
+            <div class="popular-header">
+                <h2 class="popular-title" data-i18n="pop_title">POPULAR LAPTOPS</h2>
+                <a href="#products" class="popular-view-all"><span data-i18n="pop_view_all">VIEW ALL PRODUCTS</span> <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+
+            <div class="popular-grid">
+                <!-- 1. Apple MacBook Air M3 -->
+                <div class="popular-card" onclick="openProductDetailById(101)" role="button" tabindex="0">
+                    <div class="popular-image-box">
+                        <img src="image/laptop/Apple MacBook Air M4.png"
+                             onerror="this.onerror=null; this.src='image/cat-ultrabook.png'"
+                             alt="Apple MacBook Air M3" class="popular-img">
+                    </div>
+                    <div class="popular-divider"></div>
+                    <h3 class="popular-name">Apple MacBook Air M3</h3>
+                    <p class="popular-specs">13.6" | 8GB | 256GB SSD</p>
+                    <div class="popular-pricing">
+                        <span class="pop-current-price">$1,099.00</span>
+                    </div>
+                    <div class="popular-bottom-row">
+                        <div class="popular-rating">
+                            <span class="pop-stars">★★★★★</span>
+                            <span class="pop-reviews">(128)</span>
+                        </div>
+                        <button type="button" class="popular-cart-btn" onclick="event.stopPropagation(); addProductToCart(101);" title="Add to Cart" aria-label="Add Apple MacBook Air M3 to cart">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Dell XPS 13 Plus -->
+                <div class="popular-card" onclick="openProductDetailById(102)" role="button" tabindex="0">
+                    <div class="popular-image-box">
+                        <img src="image/laptop/Dell XPS 13.png"
+                             onerror="this.onerror=null; this.src='image/cat-ultrabook.png'"
+                             alt="Dell XPS 13 Plus" class="popular-img">
+                    </div>
+                    <div class="popular-divider"></div>
+                    <h3 class="popular-name">Dell XPS 13 Plus</h3>
+                    <p class="popular-specs">13.4" | 16GB | 512GB SSD</p>
+                    <div class="popular-pricing">
+                        <span class="pop-current-price">$1,299.00</span>
+                        <span class="pop-original-price">$1,420.00</span>
+                    </div>
+                    <div class="popular-bottom-row">
+                        <div class="popular-rating">
+                            <span class="pop-stars">★★★★★</span>
+                            <span class="pop-reviews">(95)</span>
+                        </div>
+                        <button type="button" class="popular-cart-btn" onclick="event.stopPropagation(); addProductToCart(102);" title="Add to Cart" aria-label="Add Dell XPS 13 Plus to cart">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. HP Spectre x360 14 -->
+                <div class="popular-card" onclick="openProductDetailById(103)" role="button" tabindex="0">
+                    <div class="popular-image-box">
+                        <img src="image/laptop/HP Spectre x360 14.png"
+                             onerror="this.onerror=null; this.src='image/cat-2in1.png'"
+                             alt="HP Spectre x360 14" class="popular-img">
+                    </div>
+                    <div class="popular-divider"></div>
+                    <h3 class="popular-name">HP Spectre x360 14</h3>
+                    <p class="popular-specs">14.0" | 16GB | 512GB SSD</p>
+                    <div class="popular-pricing">
+                        <span class="pop-current-price">$1,199.00</span>
+                        <span class="pop-original-price">$1,399.00</span>
+                    </div>
+                    <div class="popular-bottom-row">
+                        <div class="popular-rating">
+                            <span class="pop-stars">★★★★★</span>
+                            <span class="pop-reviews">(87)</span>
+                        </div>
+                        <button type="button" class="popular-cart-btn" onclick="event.stopPropagation(); addProductToCart(103);" title="Add to Cart" aria-label="Add HP Spectre x360 14 to cart">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. Lenovo ThinkPad X1 Carbon -->
+                <div class="popular-card" onclick="openProductDetailById(104)" role="button" tabindex="0">
+                    <div class="popular-image-box">
+                        <img src="image/laptop/Lenovo ThinkPad X1 Carbon Gen 13.png"
+                             onerror="this.onerror=null; this.src='image/cat-business.png'"
+                             alt="Lenovo ThinkPad X1 Carbon" class="popular-img">
+                    </div>
+                    <div class="popular-divider"></div>
+                    <h3 class="popular-name">Lenovo ThinkPad X1 Carbon</h3>
+                    <p class="popular-specs">14.0" | 16GB | 512GB SSD</p>
+                    <div class="popular-pricing">
+                        <span class="pop-current-price">$1,249.00</span>
+                        <span class="pop-original-price">$1,499.00</span>
+                    </div>
+                    <div class="popular-bottom-row">
+                        <div class="popular-rating">
+                            <span class="pop-stars">★★★★★</span>
+                            <span class="pop-reviews">(74)</span>
+                        </div>
+                        <button type="button" class="popular-cart-btn" onclick="event.stopPropagation(); addProductToCart(104);" title="Add to Cart" aria-label="Add Lenovo ThinkPad X1 Carbon to cart">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5. ASUS ROG Zephyrus G14 -->
+                <div class="popular-card" onclick="openProductDetailById(105)" role="button" tabindex="0">
+                    <div class="popular-image-box">
+                        <img src="image/laptop/ASUS ROG Strix G16.png"
+                             onerror="this.onerror=null; this.src='image/cat-gaming.png'"
+                             alt="ASUS ROG Zephyrus G14" class="popular-img">
+                    </div>
+                    <div class="popular-divider"></div>
+                    <h3 class="popular-name">ASUS ROG Zephyrus G14</h3>
+                    <p class="popular-specs">14.0" | 16GB | 1TB SSD | RTX 4060</p>
+                    <div class="popular-pricing">
+                        <span class="pop-current-price">$1,599.00</span>
+                        <span class="pop-original-price">$1,899.00</span>
+                    </div>
+                    <div class="popular-bottom-row">
+                        <div class="popular-rating">
+                            <span class="pop-stars">★★★★★</span>
+                            <span class="pop-reviews">(165)</span>
+                        </div>
+                        <button type="button" class="popular-cart-btn" onclick="event.stopPropagation(); addProductToCart(105);" title="Add to Cart" aria-label="Add ASUS ROG Zephyrus G14 to cart">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -127,20 +488,740 @@
     <section class="products-section" id="products">
         <div class="products-container">
             <div class="section-header">
-                <h2>Featured Laptops</h2>
-                <p>Discover our premium collection of high-performance laptops</p>
+                <h2 data-i18n="featured_title">Featured Laptops</h2>
+                <p data-i18n="featured_sub">Discover our premium collection of high-performance laptops</p>
             </div>
  
             <div class="filter-container">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="gaming">Gaming</button>
-                <button class="filter-btn" data-filter="business">Business</button>
-                <button class="filter-btn" data-filter="ultrabook">Ultrabook</button>
-                <button class="filter-btn" data-filter="budget">Budget</button>
+                <button class="filter-btn active" data-filter="all" data-i18n="filter_all">All</button>
+                <button class="filter-btn" data-filter="ultrabook" data-i18n="filter_ultrabook">Ultrabooks</button>
+                <button class="filter-btn" data-filter="gaming" data-i18n="filter_gaming">Gaming</button>
+                <button class="filter-btn" data-filter="business" data-i18n="filter_business">Business</button>
+                <button class="filter-btn" data-filter="2in1" data-i18n="filter_2in1">2-in-1</button>
+                <button class="filter-btn" data-filter="budget" data-i18n="filter_student">Student</button>
+                <button class="filter-btn" data-filter="workstation" data-i18n="filter_workstation">Workstations</button>
             </div>
  
             <div class="products-grid" id="productsGrid">
-                <!-- Products will be generated here -->
+                <!-- 1. ASUS Zenbook 14 OLED (UX3405) -->
+                <div class="product-card" data-category="ultrabook" data-id="1" onclick="openProductDetailById(1)">
+                    <div class="product-image">
+                        <img src="image/laptop/ASUS Zenbook 14 OLED (UX3405).png" alt="ASUS Zenbook 14 OLED (UX3405)" onerror="this.onerror=null; this.src='image/cat-ultrabook.png'">
+                        <div class="product-badge">OLED Flagship</div>
+                        <button class="wishlist-btn" data-product-id="1" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">ASUS Zenbook 14 OLED (UX3405)</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(142 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core Ultra 7 155H, 16GB LPDDR5X, 1TB SSD, 14" 3K OLED 120Hz display</p>
+                        <div class="product-price">
+                            <span class="current-price">$1299</span>
+                            <span class="original-price">$1499</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(1)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Dell XPS 13 -->
+                <div class="product-card" data-category="ultrabook" data-id="2" onclick="openProductDetailById(2)">
+                    <div class="product-image">
+                        <img src="image/laptop/Dell XPS 13.png" alt="Dell XPS 13" onerror="this.onerror=null; this.src='image/cat-ultrabook.png'">
+                        <div class="product-badge">Ultra Thin</div>
+                        <button class="wishlist-btn" data-product-id="2" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Dell XPS 13</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(98 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core Ultra 7 155H, 16GB LPDDR5x, 512GB SSD, 13.4" FHD+ InfinityEdge</p>
+                        <div class="product-price">
+                            <span class="current-price">$1199</span>
+                            <span class="original-price">$1399</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(2)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Apple MacBook Air M4 -->
+                <div class="product-card" data-category="ultrabook" data-id="3" onclick="openProductDetailById(3)">
+                    <div class="product-image">
+                        <img src="image/laptop/Apple MacBook Air M4.png" alt="Apple MacBook Air M4" onerror="this.onerror=null; this.src='image/cat-ultrabook.png'">
+                        <div class="product-badge">Apple Silicon</div>
+                        <button class="wishlist-btn" data-product-id="3" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Apple MacBook Air M4</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(165 reviews)</span>
+                        </div>
+                        <p class="product-description">Apple M4 Chip 10-core CPU/GPU, 16GB Unified RAM, 512GB SSD, 13.6" Liquid Retina</p>
+                        <div class="product-price">
+                            <span class="current-price">$1099</span>
+                            <span class="original-price">$1199</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(3)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. HP Spectre x360 14 -->
+                <div class="product-card" data-category="ultrabook" data-id="4" onclick="openProductDetailById(4)">
+                    <div class="product-image">
+                        <img src="image/laptop/HP Spectre x360 14.png" alt="HP Spectre x360 14" onerror="this.onerror=null; this.src='image/cat-ultrabook.png'">
+                        <div class="product-badge">Premium Slim</div>
+                        <button class="wishlist-btn" data-product-id="4" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">HP Spectre x360 14</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(86 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core Ultra 7 155H, 16GB LPDDR5x, 1TB SSD, 14.0" 2.8K OLED 120Hz display</p>
+                        <div class="product-price">
+                            <span class="current-price">$1399</span>
+                            <span class="original-price">$1599</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(4)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Lenovo Yoga Slim 7i -->
+                <div class="product-card" data-category="ultrabook" data-id="5" onclick="openProductDetailById(5)">
+                    <div class="product-image">
+                        <img src="image/laptop/lenovo yoga slim 7i.png" alt="Lenovo Yoga Slim 7i" onerror="this.onerror=null; this.src='image/cat-ultrabook.png'">
+                        <div class="product-badge">Aura Edition</div>
+                        <button class="wishlist-btn" data-product-id="5" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Lenovo Yoga Slim 7i</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(92 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core Ultra 7 155H, 32GB LPDDR5X, 1TB SSD, 14.0" WUXGA OLED 100% DCI-P3</p>
+                        <div class="product-price">
+                            <span class="current-price">$1049</span>
+                            <span class="original-price">$1249</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(5)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. ASUS ROG Strix G16 -->
+                <div class="product-card" data-category="gaming" data-id="6" onclick="openProductDetailById(6)">
+                    <div class="product-image">
+                        <img src="image/laptop/ASUS ROG Strix G16.png" alt="ASUS ROG Strix G16" onerror="this.onerror=null; this.src='image/cat-gaming.png'">
+                        <div class="product-badge">RTX 4070</div>
+                        <button class="wishlist-btn" data-product-id="6" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">ASUS ROG Strix G16</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(178 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i9-14900HX, RTX 4070 8GB, 16GB DDR5, 1TB SSD, 16" QHD+ 240Hz Nebula</p>
+                        <div class="product-price">
+                            <span class="current-price">$1599</span>
+                            <span class="original-price">$1799</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(6)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Acer Predator Helios Neo 16 -->
+                <div class="product-card" data-category="gaming" data-id="7" onclick="openProductDetailById(7)">
+                    <div class="product-image">
+                        <img src="image/laptop/Acer Predator Helios Neo 16.png" alt="Acer Predator Helios Neo 16" onerror="this.onerror=null; this.src='image/cat-gaming.png'">
+                        <div class="product-badge">High FPS</div>
+                        <button class="wishlist-btn" data-product-id="7" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Acer Predator Helios Neo 16</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(130 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i7-14700HX, RTX 4060 8GB, 16GB DDR5, 1TB SSD, 16" WQXGA 165Hz IPS</p>
+                        <div class="product-price">
+                            <span class="current-price">$1349</span>
+                            <span class="original-price">$1499</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(7)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. MSI Katana 15 -->
+                <div class="product-card" data-category="gaming" data-id="8" onclick="openProductDetailById(8)">
+                    <div class="product-image">
+                        <img src="image/laptop/MSI Katana 15.png" alt="MSI Katana 15" onerror="this.onerror=null; this.src='image/cat-gaming.png'">
+                        <div class="product-badge">GeForce RTX</div>
+                        <button class="wishlist-btn" data-product-id="8" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">MSI Katana 15</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(118 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i7-13620H, RTX 4060 8GB, 16GB DDR5, 1TB SSD, 15.6" FHD 144Hz 4-Zone RGB</p>
+                        <div class="product-price">
+                            <span class="current-price">$1199</span>
+                            <span class="original-price">$1399</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(8)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. Lenovo Legion Pro 5i -->
+                <div class="product-card" data-category="gaming" data-id="9" onclick="openProductDetailById(9)">
+                    <div class="product-image">
+                        <img src="image/laptop/Lenovo Legion Pro 5i.png" alt="Lenovo Legion Pro 5i" onerror="this.onerror=null; this.src='image/cat-gaming.png'">
+                        <div class="product-badge">Esports Ready</div>
+                        <button class="wishlist-btn" data-product-id="9" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Lenovo Legion Pro 5i</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(154 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i9-14900HX, RTX 4070 8GB, 32GB DDR5, 1TB SSD, 16" WQXGA 240Hz 500nits</p>
+                        <div class="product-price">
+                            <span class="current-price">$1499</span>
+                            <span class="original-price">$1699</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(9)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. Alienware m16 R2 -->
+                <div class="product-card" data-category="gaming" data-id="10" onclick="openProductDetailById(10)">
+                    <div class="product-image">
+                        <img src="image/laptop/Alienware m16 R2.png" alt="Alienware m16 R2" onerror="this.onerror=null; this.src='image/cat-gaming.png'">
+                        <div class="product-badge">Extreme Power</div>
+                        <button class="wishlist-btn" data-product-id="10" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Alienware m16 R2</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(95 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core Ultra 9 185H, RTX 4070 8GB, 32GB DDR5, 1TB SSD, 16" QHD+ 240Hz Cryo-tech</p>
+                        <div class="product-price">
+                            <span class="current-price">$1799</span>
+                            <span class="original-price">$1999</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(10)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. Lenovo ThinkPad X1 Carbon Gen 13 -->
+                <div class="product-card" data-category="business" data-id="11" onclick="openProductDetailById(11)">
+                    <div class="product-image">
+                        <img src="image/laptop/Lenovo ThinkPad X1 Carbon Gen 13.png" alt="Lenovo ThinkPad X1 Carbon Gen 13" onerror="this.onerror=null; this.src='image/cat-business.png'">
+                        <div class="product-badge">Aura Edition</div>
+                        <button class="wishlist-btn" data-product-id="11" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Lenovo ThinkPad X1 Carbon Gen 13</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(88 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core Ultra 7 258V Lunar Lake, 32GB RAM, 1TB SSD, 14" 2.8K OLED 120Hz under 1kg</p>
+                        <div class="product-price">
+                            <span class="current-price">$1649</span>
+                            <span class="original-price">$1899</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(11)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 12. Dell Latitude 7450 -->
+                <div class="product-card" data-category="business" data-id="12" onclick="openProductDetailById(12)">
+                    <div class="product-image">
+                        <img src="image/laptop/Dell Latitude 7450.png" alt="Dell Latitude 7450" onerror="this.onerror=null; this.src='image/cat-business.png'">
+                        <div class="product-badge">Enterprise AI</div>
+                        <button class="wishlist-btn" data-product-id="12" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Dell Latitude 7450</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(76 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core Ultra 7 165U vPro, 16GB LPDDR5x, 512GB SSD, 14" FHD+ IPS display</p>
+                        <div class="product-price">
+                            <span class="current-price">$1429</span>
+                            <span class="original-price">$1629</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(12)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 13. HP EliteBook 840 G11 -->
+                <div class="product-card" data-category="business" data-id="13" onclick="openProductDetailById(13)">
+                    <div class="product-image">
+                        <img src="image/laptop/HP EliteBook 840 G11.png" alt="HP EliteBook 840 G11" onerror="this.onerror=null; this.src='image/cat-business.png'">
+                        <div class="product-badge">Sure Start</div>
+                        <button class="wishlist-btn" data-product-id="13" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">HP EliteBook 840 G11</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(94 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core Ultra 7 155H, 16GB DDR5, 512GB SSD, 14" WUXGA Anti-Glare 400 nits</p>
+                        <div class="product-price">
+                            <span class="current-price">$1349</span>
+                            <span class="original-price">$1549</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(13)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 14. ASUS ExpertBook B5 -->
+                <div class="product-card" data-category="business" data-id="14" onclick="openProductDetailById(14)">
+                    <div class="product-image">
+                        <img src="image/laptop/ASUS ExpertBook B5.png" alt="ASUS ExpertBook B5" onerror="this.onerror=null; this.src='image/cat-business.png'">
+                        <div class="product-badge">Ultra Secure</div>
+                        <button class="wishlist-btn" data-product-id="14" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">ASUS ExpertBook B5</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(65 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core Ultra 7 155H, 16GB DDR5, 1TB SSD, 14" 2.5K 16:10 144Hz display</p>
+                        <div class="product-price">
+                            <span class="current-price">$1299</span>
+                            <span class="original-price">$1450</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(14)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 15. Microsoft Surface Laptop 7 -->
+                <div class="product-card" data-category="business" data-id="15" onclick="openProductDetailById(15)">
+                    <div class="product-image">
+                        <img src="image/laptop/Microsoft Surface Laptop 7.png" alt="Microsoft Surface Laptop 7" onerror="this.onerror=null; this.src='image/cat-business.png'">
+                        <div class="product-badge">Copilot+ PC</div>
+                        <button class="wishlist-btn" data-product-id="15" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Microsoft Surface Laptop 7</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(112 reviews)</span>
+                        </div>
+                        <p class="product-description">Snapdragon X Elite 12-core, 16GB RAM, 512GB SSD, 13.8" PixelSense Touch, 20hr battery</p>
+                        <div class="product-price">
+                            <span class="current-price">$1199</span>
+                            <span class="original-price">$1399</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(15)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 16. HP Spectre x360 14 (2-in-1) -->
+                <div class="product-card" data-category="2in1" data-id="16" onclick="openProductDetailById(16)">
+                    <div class="product-image">
+                        <img src="image/laptop/HP Spectre x360 14.png" alt="HP Spectre x360 14" onerror="this.onerror=null; this.src='image/cat-2in1.png'">
+                        <div class="product-badge">Convertible OLED</div>
+                        <button class="wishlist-btn" data-product-id="16" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">HP Spectre x360 14</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(82 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core Ultra 7 155H, 16GB RAM, 1TB SSD, 14.0" 2.8K OLED Touch 360° flip + pen</p>
+                        <div class="product-price">
+                            <span class="current-price">$1449</span>
+                            <span class="original-price">$1649</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(16)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 17. Lenovo Yoga 9i 2-in-1 -->
+                <div class="product-card" data-category="2in1" data-id="17" onclick="openProductDetailById(17)">
+                    <div class="product-image">
+                        <img src="image/laptop/Lenovo Yoga 9i 2-in-1.png" alt="Lenovo Yoga 9i 2-in-1" onerror="this.onerror=null; this.src='image/cat-2in1.png'">
+                        <div class="product-badge">Bowers &amp; Wilkins</div>
+                        <button class="wishlist-btn" data-product-id="17" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Lenovo Yoga 9i 2-in-1</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(97 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core Ultra 7 155H, 16GB RAM, 1TB SSD, 14" 4K OLED PureSight Touch + rotating soundbar</p>
+                        <div class="product-price">
+                            <span class="current-price">$1499</span>
+                            <span class="original-price">$1749</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(17)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 18. Dell Inspiron 14 2-in-1 -->
+                <div class="product-card" data-category="2in1" data-id="18" onclick="openProductDetailById(18)">
+                    <div class="product-image">
+                        <img src="image/laptop/Dell Inspiron 14 2-in-1.png" alt="Dell Inspiron 14 2-in-1" onerror="this.onerror=null; this.src='image/cat-2in1.png'">
+                        <div class="product-badge">Touch 360°</div>
+                        <button class="wishlist-btn" data-product-id="18" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Dell Inspiron 14 2-in-1</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(73 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core 7 150U, 16GB DDR5, 1TB SSD, 14.0" FHD+ 16:10 Touch with Active Pen support</p>
+                        <div class="product-price">
+                            <span class="current-price">$899</span>
+                            <span class="original-price">$1049</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(18)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 19. ASUS Vivobook S 14 Flip -->
+                <div class="product-card" data-category="2in1" data-id="19" onclick="openProductDetailById(19)">
+                    <div class="product-image">
+                        <img src="image/cat-2in1.png" alt="ASUS Vivobook S 14 Flip" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&fit=crop&w=400&q=80'">
+                        <div class="product-badge">OLED Touch</div>
+                        <button class="wishlist-btn" data-product-id="19" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">ASUS Vivobook S 14 Flip</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(89 reviews)</span>
+                        </div>
+                        <p class="product-description">AMD Ryzen 7 7730U, 16GB DDR4, 512GB SSD, 14.0" 2.8K OLED 90Hz 16:10 Touch display</p>
+                        <div class="product-price">
+                            <span class="current-price">$849</span>
+                            <span class="original-price">$999</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(19)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 20. Microsoft Surface Pro 11 -->
+                <div class="product-card" data-category="2in1" data-id="20" onclick="openProductDetailById(20)">
+                    <div class="product-image">
+                        <img src="https://support.microsoft.com/en-us/surface/media/surface-pro-11th-edition.png" alt="Microsoft Surface Pro 11" onerror="this.onerror=null; this.src='image/cat-2in1.png'">
+                        <div class="product-badge">Snapdragon X Plus</div>
+                        <button class="wishlist-btn" data-product-id="20" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Microsoft Surface Pro 11</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(140 reviews)</span>
+                        </div>
+                        <p class="product-description">Snapdragon X Plus 10-core, 16GB RAM, 512GB SSD, 13" PixelSense Flow OLED 120Hz Tablet+PC</p>
+                        <div class="product-price">
+                            <span class="current-price">$999</span>
+                            <span class="original-price">$1199</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(20)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 21. Acer Aspire 5 -->
+                <div class="product-card" data-category="budget" data-id="21" onclick="openProductDetailById(21)">
+                    <div class="product-image">
+                        <img src="image/laptop/Acer Aspire 5.png" alt="Acer Aspire 5" onerror="this.onerror=null; this.src='image/cat-student.png'">
+                        <div class="product-badge">Best Value</div>
+                        <button class="wishlist-btn" data-product-id="21" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Acer Aspire 5</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(162 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i5-1335U, 16GB LPDDR5, 512GB SSD, 15.6" Full HD IPS Slim Bezel, Wi-Fi 6E</p>
+                        <div class="product-price">
+                            <span class="current-price">$549</span>
+                            <span class="original-price">$649</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(21)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 22. ASUS Vivobook 15 -->
+                <div class="product-card" data-category="budget" data-id="22" onclick="openProductDetailById(22)">
+                    <div class="product-image">
+                        <img src="image/laptop/ASUS Vivobook 15.png" alt="ASUS Vivobook 15" onerror="this.onerror=null; this.src='image/cat-student.png'">
+                        <div class="product-badge">Student Favorite</div>
+                        <button class="wishlist-btn" data-product-id="22" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">ASUS Vivobook 15</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(180 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i5-1335U, 16GB DDR4, 512GB SSD, 15.6" FHD NanoEdge Anti-Glare 180° hinge</p>
+                        <div class="product-price">
+                            <span class="current-price">$599</span>
+                            <span class="original-price">$699</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(22)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 23. Lenovo IdeaPad Slim 3 -->
+                <div class="product-card" data-category="budget" data-id="23" onclick="openProductDetailById(23)">
+                    <div class="product-image">
+                        <img src="image/laptop/Lenovo IdeaPad Slim 3.png" alt="Lenovo IdeaPad Slim 3" onerror="this.onerror=null; this.src='image/cat-student.png'">
+                        <div class="product-badge">All-Day Battery</div>
+                        <button class="wishlist-btn" data-product-id="23" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Lenovo IdeaPad Slim 3</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(132 reviews)</span>
+                        </div>
+                        <p class="product-description">AMD Ryzen 5 7530U, 16GB DDR4, 512GB SSD, 15.6" FHD IPS Display with Dolby Audio</p>
+                        <div class="product-price">
+                            <span class="current-price">$529</span>
+                            <span class="original-price">$629</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(23)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 24. HP Pavilion 15 -->
+                <div class="product-card" data-category="budget" data-id="24" onclick="openProductDetailById(24)">
+                    <div class="product-image">
+                        <img src="image/laptop/HP Pavilion 15.png" alt="HP Pavilion 15" onerror="this.onerror=null; this.src='image/cat-student.png'">
+                        <div class="product-badge">Fast Charging</div>
+                        <button class="wishlist-btn" data-product-id="24" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">HP Pavilion 15</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(104 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i5-1335U, 16GB DDR4, 512GB SSD, 15.6" FHD Micro-Edge Display, B&amp;O Audio</p>
+                        <div class="product-price">
+                            <span class="current-price">$629</span>
+                            <span class="original-price">$749</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(24)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 25. Dell Inspiron 15 3530 -->
+                <div class="product-card" data-category="budget" data-id="25" onclick="openProductDetailById(25)">
+                    <div class="product-image">
+                        <img src="image/laptop/Dell Inspiron 15 3530.png" alt="Dell Inspiron 15 3530" onerror="this.onerror=null; this.src='image/cat-student.png'">
+                        <div class="product-badge">Reliable Core</div>
+                        <button class="wishlist-btn" data-product-id="25" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Dell Inspiron 15 3530</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(95 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i5-1334U, 16GB DDR4, 512GB SSD, 15.6" FHD 120Hz Anti-Glare Display</p>
+                        <div class="product-price">
+                            <span class="current-price">$569</span>
+                            <span class="original-price">$679</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(25)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 26. Dell Precision 7680 -->
+                <div class="product-card" data-category="workstation" data-id="26" onclick="openProductDetailById(26)">
+                    <div class="product-image">
+                        <img src="image/laptop/Dell Precision 7680.png" alt="Dell Precision 7680" onerror="this.onerror=null; this.src='image/cat-workstation.png'">
+                        <div class="product-badge">ISV Certified</div>
+                        <button class="wishlist-btn" data-product-id="26" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Dell Precision 7680</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(58 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i9-13950HX vPro, RTX 3500 Ada 12GB, 64GB DDR5, 1TB SSD, 16.0" FHD+ 500 nits</p>
+                        <div class="product-price">
+                            <span class="current-price">$2399</span>
+                            <span class="original-price">$2699</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(26)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 27. Lenovo ThinkPad P16 Gen 2 -->
+                <div class="product-card" data-category="workstation" data-id="27" onclick="openProductDetailById(27)">
+                    <div class="product-image">
+                        <img src="image/laptop/Lenovo ThinkPad P16 Gen 2 .png" alt="Lenovo ThinkPad P16 Gen 2" onerror="this.onerror=null; this.src='image/cat-workstation.png'">
+                        <div class="product-badge">Workstation</div>
+                        <button class="wishlist-btn" data-product-id="27" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Lenovo ThinkPad P16 Gen 2</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(64 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i9-13980HX, RTX 4080 12GB, 32GB DDR5, 1TB SSD, 16.0" 4K OLED 500 nits</p>
+                        <div class="product-price">
+                            <span class="current-price">$2199</span>
+                            <span class="original-price">$2499</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(27)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 28. HP ZBook Fury 16 G11 -->
+                <div class="product-card" data-category="workstation" data-id="28" onclick="openProductDetailById(28)">
+                    <div class="product-image">
+                        <img src="image/laptop/HP ZBook Fury 16 G11.png" alt="HP ZBook Fury 16 G11" onerror="this.onerror=null; this.src='image/cat-workstation.png'">
+                        <div class="product-badge">Max Performance</div>
+                        <button class="wishlist-btn" data-product-id="28" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">HP ZBook Fury 16 G11</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(52 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i9-14900HX, RTX 4000 Ada 12GB, 64GB DDR5, 2TB SSD, 16.0" 4K OLED DreamColor</p>
+                        <div class="product-price">
+                            <span class="current-price">$2599</span>
+                            <span class="original-price">$2899</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(28)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 29. ASUS ProArt P16 -->
+                <div class="product-card" data-category="workstation" data-id="29" onclick="openProductDetailById(29)">
+                    <div class="product-image">
+                        <img src="image/laptop/ASUS ProArt P16.png" alt="ASUS ProArt P16" onerror="this.onerror=null; this.src='image/cat-workstation.png'">
+                        <div class="product-badge">Creator Dial</div>
+                        <button class="wishlist-btn" data-product-id="29" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">ASUS ProArt P16</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(72 reviews)</span>
+                        </div>
+                        <p class="product-description">AMD Ryzen AI 9 HX 370, RTX 4070 8GB, 32GB RAM, 2TB SSD, 16" 4K OLED + ASUS DialPad</p>
+                        <div class="product-price">
+                            <span class="current-price">$1999</span>
+                            <span class="original-price">$2299</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(29)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 30. MSI CreatorPro X17 -->
+                <div class="product-card" data-category="workstation" data-id="30" onclick="openProductDetailById(30)">
+                    <div class="product-image">
+                        <img src="image/laptop/MSI CreatorPro X17.png" alt="MSI CreatorPro X17" onerror="this.onerror=null; this.src='image/cat-workstation.png'">
+                        <div class="product-badge">HX Powerhouse</div>
+                        <button class="wishlist-btn" data-product-id="30" onclick="toggleWishlist(event)">♡</button>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">MSI CreatorPro X17</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="reviews">(44 reviews)</span>
+                        </div>
+                        <p class="product-description">Intel Core i9-13980HX, RTX 5000 Ada 16GB, 64GB DDR5, 2TB SSD, 17.3" 4K Mini-LED 144Hz</p>
+                        <div class="product-price">
+                            <span class="current-price">$2799</span>
+                            <span class="original-price">$3199</span>
+                        </div>
+                        <div class="product-actions-bar">
+                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addProductToCart(30)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
             </div>
  
             <div class="load-more-container">
@@ -150,7 +1231,7 @@
     </section>
  
     <!-- Product Detail Modal -->
-    <div class="modal section-hidden" id="productModal">
+    <div class="modal" id="productModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle">Product Details</h2>
@@ -195,13 +1276,8 @@
 
             <!-- Login Form -->
             <form id="loginForm" class="account-form active" onsubmit="event.preventDefault(); loginAccount();">
-                <div class="login-role-hints">
-                    <span class="hint-title"><i class="fa-solid fa-circle-info"></i> Login Guide:</span>
-                    <span>• <strong>Admin Login:</strong> <code>admin@khcomputer.com</code> | Pass: <code>admin123</code></span>
-                    <span>• <strong>User / Client:</strong> Enter your email or Register below to buy!</span>
-                </div>
                 <label>Email or Username</label>
-                <input type="text" id="loginEmail" placeholder="admin@khcomputer.com or client email" required>
+                <input type="text" id="loginEmail" placeholder="Enter your email or username" required>
                 <label>Password</label>
                 <input type="password" id="loginPassword" placeholder="Enter password" required>
                 <button class="checkout-btn" type="submit">Login</button>
@@ -209,10 +1285,6 @@
 
             <!-- Register Form -->
             <form id="registerForm" class="account-form" onsubmit="event.preventDefault(); registerAccount();">
-                <div class="login-role-hints client-hint">
-                    <span class="hint-title"><i class="fa-solid fa-user"></i> Client Registration:</span>
-                    <span>Create your buyer account to shop, track cart items and place orders!</span>
-                </div>
                 <label>Full Name</label>
                 <input type="text" id="registerName" placeholder="Your name" required>
                 <label>Email</label>
@@ -299,10 +1371,11 @@
                         <div class="form-group">
                             <label><i class="fa-solid fa-tags"></i> Category *</label>
                             <select id="adminProdCategory" required>
+                                <option value="ultrabook">Ultrabook</option>
                                 <option value="gaming">Gaming</option>
                                 <option value="business">Business</option>
-                                <option value="ultrabook">Ultrabook</option>
-                                <option value="budget">Budget Friendly</option>
+                                <option value="2in1">2-in-1</option>
+                                <option value="budget">Student / Budget</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -437,10 +1510,11 @@
                     <div class="form-group">
                         <label>Category</label>
                         <select id="editProdCategory" required>
+                            <option value="ultrabook">Ultrabook</option>
                             <option value="gaming">Gaming</option>
                             <option value="business">Business</option>
-                            <option value="ultrabook">Ultrabook</option>
-                            <option value="budget">Budget Friendly</option>
+                            <option value="2in1">2-in-1</option>
+                            <option value="budget">Student / Budget</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1108,78 +2182,147 @@
     </div>
 </section>
 
-<!-- Footer Sealeation -->
-
-<footer class="footer">
-
-    <div class="footer-wave"></div>
-
-    <div class="footer-content">
-
-        <div class="footer-section footer-brand">
-            <a href="#home" class="footer-logo">
-                <img src="image/logo.png" alt="KH Computer" class="footer-logo-img">
-                <div class="logo-text">
-                    <span class="main-title" style="color: #ffffff;"><span class="brand-kh">KH</span> COMPUTER</span>
-                    <span class="sub-title" style="color: #a5b4fc;">TECHNOLOGY & SOLUTIONS</span>
+<!-- Footer Section -->
+<footer class="footer" id="footer">
+    <div class="footer-container">
+        <!-- Top: Newsletter Subscription Bar -->
+        <div class="footer-newsletter-card">
+            <div class="newsletter-left">
+                <div class="newsletter-icon-box">
+                    <i class="fa-solid fa-envelope-open-text"></i>
                 </div>
-            </a>
-            <p class="footer-description">
-                Premium laptops for gaming, work, and creativity. Discover powerful performance with modern design.
-            </p>
-
-            <div class="footer-contact">
-                <span><i class="fas fa-map-marker-alt"></i> stueng meanchey, Phnom Penh</span>
-                <span><i class="fas fa-phone-alt"></i> +855 17 830 021</span>
-                <span><i class="fas fa-envelope"></i> info@khcomputer.com</span>
+                <div class="newsletter-headings">
+                    <span class="newsletter-tag">STAY UPDATED</span>
+                    <h3 class="newsletter-title">Subscribe to Our Newsletter</h3>
+                    <p class="newsletter-subtitle">Get the latest deals, new arrivals, and exclusive offers.</p>
+                </div>
             </div>
-
-            <div class="social-links">
-                <a href="https://www.facebook.com/ToroEmmSremm007" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://x.com/Kh_Computer007/about" class="social-icon"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.google.com/search?q=ig&oq=ig&gs_lcrp=EgZjaHJvbWUqEggAEAAYQxiDARixAxiABBiKBTISCAAQABh
-                DGIMBGLEDGIAEGIoFMgwIARAAGEMYgAQYigUyEggCEC4YQxjHARjRAxiABBiKBTIMCAMQABhDGIAEGIoFMhIIBBAuGEMYxwEY0QMYgAQY
-                igUyDAgFEAAYQxiABBiKBTISCAYQLhhDGMcBGNEDGIAEGIoFMgwIBxAuGEMYgAQYigUyDAgIEC4YQxiABBiKBTIMCAkQLhhDGIAEGIoF0
-                gEHMzkyajBqN6gCALACAA&sourceid=chrome&ie=UTF-8" class="social-icon"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.youtube.com/@khcomputers" class="social-icon"><i class="fab fa-youtube"></i></a>
+            <div class="newsletter-right">
+                <form class="newsletter-form-modern" id="newsletterForm" onsubmit="event.preventDefault(); subscribeNewsletter();">
+                    <input type="email" id="newsletterEmail" placeholder="Enter your email address" required>
+                    <button type="submit" class="newsletter-submit-btn">SUBSCRIBE</button>
+                </form>
+                <div id="newsletterMessage" class="newsletter-message"></div>
             </div>
         </div>
 
-        <div class="footer-section">
-            <h4>Explore</h4>
-            <ul>
-                <li><a href="#products">Shop Laptops</a></li>
-                <li><a href="#deals">Latest Deals</a></li>
-                <li><a href="#products">Gaming Series</a></li>
-                <li><a href="#products">Ultrabooks</a></li>
-                <li><a href="#about">About Us</a></li>
-            </ul>
+        <!-- Middle: Main 6-Column Layout with User Information -->
+        <div class="footer-main-grid">
+            <!-- Col 1: Brand Info -->
+            <div class="footer-col brand-col">
+                <a href="#home" class="footer-brand-logo">
+                    <img src="image/logo.png" alt="KH Computer" class="footer-logo-img" onerror="this.style.display='none'">
+                    <div class="footer-brand-text">
+                        <span class="main-title"><span class="brand-kh">KH</span> COMPUTER</span>
+                        <span class="footer-brand-sub">TECHNOLOGY & SOLUTIONS</span>
+                    </div>
+                </a>
+                <p class="footer-brand-desc">
+                    Your one-stop destination for premium laptops in Cambodia. Quality, trust, and performance guaranteed with official support.
+                </p>
+                <div class="footer-social-row">
+                    <a href="https://www.facebook.com/ToroEmmSremm007" target="_blank" class="social-btn" title="Facebook" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/" target="_blank" class="social-btn" title="Instagram" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://x.com/Kh_Computer007/about" target="_blank" class="social-btn" title="X (Twitter)" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://t.me/JangWuJi007" target="_blank" class="social-btn" title="Telegram" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="https://www.youtube.com/@khcomputers" target="_blank" class="social-btn" title="YouTube" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Col 2: QUICK LINKS -->
+            <div class="footer-col">
+                <h4 class="footer-col-title">QUICK LINKS</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Shop Laptops</a></li>
+                    <li><a href="#top-brands">Brands</a></li>
+                    <li><a href="#deals">Deals & Offers</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3: CUSTOMER SERVICE -->
+            <div class="footer-col">
+                <h4 class="footer-col-title">CUSTOMER SERVICE</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="#cart" onclick="event.preventDefault(); openCart();">Track Order</a></li>
+                    <li><a href="#contact">Shipping & Delivery</a></li>
+                    <li><a href="#contact">Returns & Refunds</a></li>
+                    <li><a href="#contact">Warranty Policy</a></li>
+                    <li><a href="#contact">FAQs</a></li>
+                    <li><a href="https://t.me/JangWuJi007" target="_blank">Telegram Support</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 4: SHOP BY CATEGORY -->
+            <div class="footer-col">
+                <h4 class="footer-col-title">SHOP BY CATEGORY</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="#categories" onclick="selectCategory('ultrabook')">Ultrabooks</a></li>
+                    <li><a href="#categories" onclick="selectCategory('gaming')">Gaming Laptops</a></li>
+                    <li><a href="#categories" onclick="selectCategory('business')">Business Laptops</a></li>
+                    <li><a href="#categories" onclick="selectCategory('2in1')">2-in-1 Laptops</a></li>
+                    <li><a href="#categories" onclick="selectCategory('budget')">Student Laptops</a></li>
+                    <li><a href="#categories" onclick="selectCategory('workstation')">Workstations</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 5: CONTACT US (User's Exact Information) -->
+            <div class="footer-col contact-col">
+                <h4 class="footer-col-title">CONTACT US</h4>
+                <div class="footer-contact-details">
+                    <div class="contact-info-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Stueng Meanchey, Phnom Penh, Cambodia</span>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <a href="tel:+85517830021">+855 17 830 021</a>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fa-brands fa-telegram"></i>
+                        <a href="https://t.me/JangWuJi007" target="_blank">@JangWuJi007</a>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <a href="mailto:info@khcomputer.com">info@khcomputer.com</a>
+                    </div>
+                    <div class="contact-info-item owner-item">
+                        <i class="fa-solid fa-user-check"></i>
+                        <span>Owner: <strong>Sar Chanrithy</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Col 6: WE ACCEPT -->
+            <div class="footer-col payment-col">
+                <h4 class="footer-col-title">WE ACCEPT</h4>
+                <div class="we-accept-grid">
+                    <div class="payment-card-badge pay-aba" title="ABA Pay"><span class="badge-text">ABA Pay</span></div>
+                    <div class="payment-card-badge pay-khqr" title="Bakong KHQR"><span class="badge-text">KHQR</span></div>
+                    <div class="payment-card-badge pay-wing" title="Wing Bank"><span class="badge-text">Wing</span></div>
+                    <div class="payment-card-badge pay-truemoney" title="TrueMoney"><span class="badge-text">TrueMoney</span></div>
+                    <div class="payment-card-badge pay-visa" title="Visa Card"><i class="fa-brands fa-cc-visa"></i> VISA</div>
+                    <div class="payment-card-badge pay-mastercard" title="Mastercard"><i class="fa-brands fa-cc-mastercard"></i> Master</div>
+                    <div class="payment-card-badge pay-cod full-width" title="Cash on Delivery"><i class="fa-solid fa-hand-holding-dollar"></i> Cash on Delivery</div>
+                </div>
+            </div>
         </div>
 
-        <div class="footer-section">
-            <h4>Support</h4>
-            <ul>
-                <li><a href="#contact">Contact Us</a></li>
-                <li><a href="#contact">Shipping</a></li>
-                <li><a href="#contact">Warranty</a></li>
-                <li><a href="#contact">FAQ</a></li>
-                <li><a href="#contact">Help Center</a></li>
-            </ul>
+        <!-- Bottom Copyright Bar -->
+        <div class="footer-bottom-bar">
+            <div class="footer-copyright">
+                &copy; 2024 - 2026 <strong>KH Computer</strong>. All Rights Reserved. Owner: <strong>Sar Chanrithy</strong>.
+            </div>
+            <div class="footer-policy-links">
+                <a href="#about">Privacy Policy</a>
+                <span class="policy-divider">|</span>
+                <a href="#about">Terms &amp; Conditions</a>
+                <span class="policy-divider">|</span>
+                <a href="#contact">Warranty Policy</a>
+            </div>
         </div>
-
-        <div class="footer-section footer-newsletter">
-            <h4>Newsletter</h4>
-            <p class="newsletter-text">
-                Subscribe for exclusive laptop deals, launch alerts, and product tips.
-            </p>
-            <form class="newsletter-form" id="newsletterForm" onsubmit="event.preventDefault(); subscribeNewsletter();">
-                <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
-                <button type="submit">Subscribe</button>
-            </form>
-            <div id="newsletterMessage" class="newsletter-message"></div>
-        </div>
-
-    </div>
     </div>
 </footer>
 

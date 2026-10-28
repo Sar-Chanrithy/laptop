@@ -81,71 +81,164 @@ if (window.matchMedia) {
     });
 }
 
-// ==================== SECTION VISIBILITY ====================
-const aboutSection = document.getElementById('about');
-const contactSection = document.getElementById('contact');
-const homeSection = document.getElementById('home');
-const productsSection = document.getElementById('products');
-const dealsSection = document.getElementById('deals');
+// ==================== MULTI-LANGUAGE SYSTEM (ENGLISH & KHMER) ====================
+const translations = {
+    en: {
+        nav_home: 'Home',
+        nav_products: 'Products',
+        nav_brands: 'Brands',
+        nav_deals: 'Deals',
+        nav_about: 'About',
+        nav_contact: 'Contact',
+        nav_admin: 'Admin',
+        cat_ultrabooks: 'Ultrabooks',
+        cat_gaming: 'Gaming Laptops',
+        cat_business: 'Business Laptops',
+        cat_2in1: '2-in-1 Laptops',
+        cat_student: 'Student Laptops',
+        cat_workstation: 'Workstations',
+        hero_tag: 'NEXT GENERATION TECH',
+        hero_title: 'Smarter Devices.<br><span class="hero-title-accent">Limitless Power.</span>',
+        hero_desc: 'Discover innovative electronics and groundbreaking dual-screen performance engineered to power your life, work, and play without limits.',
+        hero_shop_now: 'Shop Now',
+        hero_explore: 'Explore Models',
+        section_category: 'SHOP BY CATEGORY',
+        pop_title: 'POPULAR LAPTOPS',
+        pop_view_all: 'VIEW ALL PRODUCTS',
+        featured_title: 'Featured Laptops',
+        featured_sub: 'Discover our premium collection of high-performance laptops',
+        filter_all: 'All',
+        filter_ultrabook: 'Ultrabooks',
+        filter_gaming: 'Gaming',
+        filter_business: 'Business',
+        filter_2in1: '2-in-1',
+        filter_student: 'Student',
+        filter_workstation: 'Workstations',
+        btn_add_cart: 'Add to Cart',
+        btn_buy_now: 'Buy Now',
+        toast_en: '🇬🇧 Switched to English',
+        toast_kh: '🇰🇭 បានប្តូរទៅជា ភាសាខ្មែរ'
+    },
+    kh: {
+        nav_home: 'ទំព័រដើម',
+        nav_products: 'ផលិតផល',
+        nav_brands: 'ម៉ាកយីហោ',
+        nav_deals: 'ប្រូម៉ូសិន',
+        nav_about: 'អំពីយើង',
+        nav_contact: 'ទំនាក់ទំនង',
+        nav_admin: 'អ្នកគ្រប់គ្រង',
+        cat_ultrabooks: 'Ultrabooks (ស្តើង ស្រាល)',
+        cat_gaming: 'Gaming (លេងហ្គេម)',
+        cat_business: 'Business (ការងារ)',
+        cat_2in1: '2-in-1 (បត់បាន)',
+        cat_student: 'Student (សិស្ស/និស្សិត)',
+        cat_workstation: 'Workstations (ជំនាញធ្ងន់ៗ)',
+        hero_tag: 'បច្ចេកវិទ្យាជំនាន់ថ្មី',
+        hero_title: 'ឧបករណ៍ឆ្លាតវៃជាងមុន។<br><span class="hero-title-accent">ថាមពលគ្មានដែនកំណត់។</span>',
+        hero_desc: 'ស្វែងរកឧបករណ៍អេឡិចត្រូនិកទំនើប និងប្រសិទ្ធភាពអេក្រង់ភ្លោះដ៏អស្ចារ្យ ដែលរចនាឡើងដើម្បីពង្រឹងជីវិត ការងារ និងការកម្សាន្តរបស់អ្នកដោយគ្មានដែនកំណត់។',
+        hero_shop_now: 'ទិញឥឡូវនេះ',
+        hero_explore: 'ស្វែងរកម៉ូឌែល',
+        section_category: 'ជ្រើសរើសតាមប្រភេទ',
+        pop_title: 'កុំព្យូទ័រពេញនិយមបំផុត',
+        pop_view_all: 'មើលផលិតផលទាំងអស់',
+        featured_title: 'កុំព្យូទ័រឆ្នើមៗ',
+        featured_sub: 'ស្វែងរកការប្រមូលផ្តុំកុំព្យូទ័រយួរដៃលំដាប់ខ្ពស់ និងមានសមត្ថភាពខ្លាំងក្លា',
+        filter_all: 'ទាំងអស់',
+        filter_ultrabook: 'Ultrabooks',
+        filter_gaming: 'លេងហ្គេម',
+        filter_business: 'ការងារ',
+        filter_2in1: '2-in-1',
+        filter_student: 'សិស្ស/និស្សិត',
+        filter_workstation: 'Workstations',
+        btn_add_cart: 'ដាក់ចូលកន្ត្រក',
+        btn_buy_now: 'ទិញភ្លាមៗ',
+        toast_en: '🇬🇧 Switched to English',
+        toast_kh: '🇰🇭 បានប្តូរទៅជា ភាសាខ្មែរ'
+    }
+};
 
-// Hide About and Contact sections on page load
-if (aboutSection) aboutSection.classList.add('section-hidden');
-if (contactSection) contactSection.classList.add('section-hidden');
+function getPreferredLanguage() {
+    return localStorage.getItem('kh_language') || 'en';
+}
 
-// Add click handlers for About and Contact nav links
+function applyLanguage(lang) {
+    if (lang !== 'en' && lang !== 'kh') lang = 'en';
+    document.documentElement.setAttribute('data-lang', lang);
+    document.documentElement.setAttribute('lang', lang === 'kh' ? 'km' : 'en');
+
+    // Update active state on toggle buttons
+    const btnEn = document.getElementById('langBtnEn');
+    const btnKh = document.getElementById('langBtnKh');
+    if (btnEn) btnEn.classList.toggle('active', lang === 'en');
+    if (btnKh) btnKh.classList.toggle('active', lang === 'kh');
+
+    const dict = translations[lang] || translations.en;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+            const arrow = el.querySelector('.dropdown-arrow');
+            if (arrow) {
+                el.innerHTML = dict[key] + ' <span class="dropdown-arrow">▼</span>';
+            } else if (dict[key].includes('<')) {
+                el.innerHTML = dict[key];
+            } else {
+                el.textContent = dict[key];
+            }
+        }
+    });
+
+    // Update Add to Cart buttons inside product cards
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.textContent = dict.btn_add_cart;
+    });
+}
+
+function setLanguage(lang, showToast = true) {
+    if (lang !== 'en' && lang !== 'kh') lang = 'en';
+    localStorage.setItem('kh_language', lang);
+    applyLanguage(lang);
+    if (showToast && typeof showNotification === 'function') {
+        showNotification(lang === 'kh' ? translations.kh.toast_kh : translations.en.toast_en, 2500);
+    }
+}
+
+function toggleLanguage() {
+    const current = getPreferredLanguage();
+    setLanguage(current === 'en' ? 'kh' : 'en', true);
+}
+
+// Global exposure
+window.setLanguage = setLanguage;
+window.toggleLanguage = toggleLanguage;
+window.applyLanguage = applyLanguage;
+
+// Initial application
+applyLanguage(getPreferredLanguage());
+
+// ==================== SECTION NAVIGATION & SMOOTH SCROLL ====================
+// Keep all sections visible and smoothly scroll to the selected section
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
-        
-        // Handle About link - show only About
-        if (href === '#about') {
-            e.preventDefault();
-            if (aboutSection) {
-                aboutSection.classList.remove('section-hidden');
-                aboutSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (href && href.startsWith('#') && href !== '#') {
+            const target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                const nav = document.querySelector('.navbar');
+                const navHeight = nav ? nav.offsetHeight : 70;
+                const top = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 8;
+                window.scrollTo({ top, behavior: 'smooth' });
+
+                // Update active state in navMenu
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                // Close mobile menu if open
+                if (hamburgerMenu && hamburgerMenu.classList.contains('active')) {
+                    hamburgerMenu.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
             }
-            if (contactSection) contactSection.classList.add('section-hidden');
-            if (homeSection) homeSection.classList.add('section-hidden');
-            if (productsSection) productsSection.classList.add('section-hidden');
-            if (dealsSection) dealsSection.classList.add('section-hidden');
-        }
-        
-        // Handle Contact link - show only Contact
-        if (href === '#contact') {
-            e.preventDefault();
-            if (contactSection) {
-                contactSection.classList.remove('section-hidden');
-                contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-            if (aboutSection) aboutSection.classList.add('section-hidden');
-            if (homeSection) homeSection.classList.add('section-hidden');
-            if (productsSection) productsSection.classList.add('section-hidden');
-            if (dealsSection) dealsSection.classList.add('section-hidden');
-        }
-        
-        // Show only the clicked section when navigating to Home, Products, or Deals
-        if (href === '#home') {
-            if (homeSection) homeSection.classList.remove('section-hidden');
-            if (productsSection) productsSection.classList.remove('section-hidden');
-            if (dealsSection) dealsSection.classList.remove('section-hidden');
-            if (aboutSection) aboutSection.classList.add('section-hidden');
-            if (contactSection) contactSection.classList.add('section-hidden');
-        }
-        
-        if (href === '#products') {
-            if (productsSection) productsSection.classList.remove('section-hidden');
-            if (homeSection) homeSection.classList.add('section-hidden');
-            if (aboutSection) aboutSection.classList.add('section-hidden');
-            if (contactSection) contactSection.classList.add('section-hidden');
-            if (dealsSection) dealsSection.classList.add('section-hidden');
-        }
-        
-        if (href === '#deals') {
-            if (dealsSection) dealsSection.classList.remove('section-hidden');
-            if (homeSection) homeSection.classList.add('section-hidden');
-            if (aboutSection) aboutSection.classList.add('section-hidden');
-            if (contactSection) contactSection.classList.add('section-hidden');
-            if (productsSection) productsSection.classList.add('section-hidden');
         }
     });
 });
@@ -260,7 +353,7 @@ function searchProducts(query) {
         }
     });
 
-    filterBtns.forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
     if (allBtn) allBtn.classList.add('active');
 
@@ -281,6 +374,46 @@ function searchProducts(query) {
 // ==================== SHOPPING CART FUNCTIONALITY ====================
 let cartCount = parseInt(localStorage.getItem('cartCount')) || 0;
 updateCartBadge();
+
+function addProductToCart(productId) {
+    const list = (typeof allProducts !== 'undefined' && allProducts.length > 0) ? allProducts : defaultProducts;
+    let product = list.find(p => p.id == productId);
+    if (!product && typeof defaultProducts !== 'undefined') {
+        product = defaultProducts.find(p => p.id == productId);
+    }
+    if (!product && typeof popularProducts !== 'undefined') {
+        product = popularProducts.find(p => p.id == productId);
+    }
+    if (!product && typeof categoryFlagshipProducts !== 'undefined') {
+        product = Object.values(categoryFlagshipProducts).find(p => p.id == productId);
+    }
+    if (!product) return;
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existing = cart.find(item => item.id == productId);
+
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            quantity: 1
+        });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    localStorage.setItem('cartCount', cartCount);
+    updateCartBadge();
+
+    if (typeof showNotification === 'function') {
+        showNotification(`Added ${product.name} to cart! 🛒`);
+    }
+}
+window.addProductToCart = addProductToCart;
 
 cartIcon.addEventListener('click', (e) => {
     e.preventDefault();
@@ -747,14 +880,20 @@ function closeOrderSuccessModal() {
 }
 
 function addProductToCart(productId) {
-    let product = products.find(p => p.id === productId);
-    if (!product) {
-        product = allProducts.find(p => p.id === productId);
+    let product = (typeof products !== 'undefined' ? products : []).find(p => p.id == productId);
+    if (!product && typeof allProducts !== 'undefined') {
+        product = allProducts.find(p => p.id == productId);
+    }
+    if (!product && typeof defaultProducts !== 'undefined') {
+        product = defaultProducts.find(p => p.id == productId);
+    }
+    if (!product && typeof popularProducts !== 'undefined') {
+        product = popularProducts.find(p => p.id == productId);
     }
     if (!product) return;
 
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingProduct = cart.find(item => item.id === productId);
+    const existingProduct = cart.find(item => item.id == productId);
 
     if (existingProduct) {
         existingProduct.quantity += 1;
@@ -907,7 +1046,7 @@ function loginAccount() {
     const account = accounts.find(acc => acc.email === emailInput && acc.password === password);
 
     if (!account) {
-        message.textContent = 'Invalid email or password. Use admin@khcomputer.com (admin123) for Admin, or register below!';
+        message.textContent = 'Invalid email or password. Please try again or register below!';
         message.style.color = '#dc2626';
         return;
     }
@@ -1077,9 +1216,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ==================== SHOP NOW BUTTON ====================
-document.querySelector('.cta-button').addEventListener('click', () => {
-    alert('Redirecting to products page...\n\nThis would navigate to the products section.');
-});
+const ctaBtn = document.querySelector('.cta-button');
+if (ctaBtn) {
+    ctaBtn.addEventListener('click', () => {
+        const prodSec = document.getElementById('products');
+        if (prodSec) prodSec.scrollIntoView({ behavior: 'smooth' });
+    });
+}
 
 // ==================== KEYBOARD SHORTCUTS ====================
 document.addEventListener('keydown', (e) => {
@@ -1136,391 +1279,878 @@ style.textContent = `
             opacity: 1;
         }
     }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-    }
 `;
 document.head.appendChild(style);
 
-// Product Selection 
-
-// Product Data
-const defaultProducts = [
+// Supplementary Popular Highlight Laptops (supporting IDs 101-105 from Popular Laptops Section)
+const popularProducts = [
     {
-        id: 1,
-        name: 'ROG Strix G16',
-        category: 'gaming',
-        price: 2499,
-        originalPrice: 2999,
-        badge: 'Sale',
-        image: 'https://dlcdnwebimgs.asus.com/files/media/601ee339-f392-4b62-87c3-972107bda726/v1/img/gaming/pd.jpg',
-        rating: 5,
-        reviews: 248,
-        description: 'Intel i9, RTX 4080, 32GB RAM, 1TB SSD',
-        specs: {
-            'Processor': 'Intel Core i9-13th Gen',
-            'Graphics': 'NVIDIA RTX 4080',
-            'RAM': '32GB DDR5',
-            'Storage': '1TB NVMe SSD',
-            'Display': '16" 144Hz IPS',
-            'Weight': '2.4 kg'
-        }
-    },
-    {
-        id: 2,
-        name: 'Dell XPS 15 Business',
-        category: 'business',
-        price: 1799,
-        originalPrice: 1999,
-        badge: null,
-        image: 'https://m.media-amazon.com/images/I/81ErR1l0ToL._AC_UF894,1000_QL80_.jpg',
-        rating: 4,
-        reviews: 156,
-        description: 'Intel i7, 16GB RAM, 512GB SSD, 15.6" 4K',
-        specs: {
-            'Processor': 'Intel Core i7-13th Gen',
-            'Graphics': 'Intel Iris Xe',
-            'RAM': '16GB DDR5',
-            'Storage': '512GB NVMe SSD',
-            'Display': '15.6" 4K OLED',
-            'Weight': '2.0 kg'
-        }
-    },
-    {
-        id: 3,
-        name: 'MacBook Pro 16"',
+        id: 101,
+        name: 'Apple MacBook Air M3',
+        brand: 'Apple',
         category: 'ultrabook',
-        price: 3499,
-        originalPrice: null,
-        badge: 'Hot',
-        image: 'https://photos5.appleinsider.com/gallery/45240-88149-The-new-MacBook-Pro-16-inch-xl.jpg',
-        rating: 5,
-        reviews: 512,
-        description: 'M3 Max, 36GB RAM, 1TB SSD, 16" Retina',
-        specs: {
-            'Processor': 'Apple M3 Max',
-            'Graphics': '19-core GPU',
-            'RAM': '36GB Unified Memory',
-            'Storage': '1TB SSD',
-            'Display': '16" Liquid Retina XDR',
-            'Weight': '2.1 kg'
-        }
-    },
-    {
-        id: 4,
-        name: 'HP Pavilion 15',
-        category: 'budget',
-        price: 549,
-        originalPrice: 649,
-        badge: 'New',
-        image: 'https://laptopmedia.com/wp-content/uploads/2022/01/hppaviliongaming1515-dk2000featured.jpg',
-        rating: 4,
-        reviews: 89,
-        description: 'AMD Ryzen 5, 8GB RAM, 256GB SSD',
-        specs: {
-            'Processor': 'AMD Ryzen 5 5500U',
-            'Graphics': 'Radeon Graphics',
-            'RAM': '8GB DDR4',
-            'Storage': '256GB SSD',
-            'Display': '15.6" FHD',
-            'Weight': '1.74 kg'
-        }
-    },
-    {
-        id: 5,
-        name: 'MSI Raider GE77',
-        category: 'gaming',
-        price: 2799,
-        originalPrice: 3299,
-        badge: null,
-        image: 'https://www.stuff.tv/wp-content/uploads/sites/2/2022/09/MSI-Raider-GE77HX-12UHS-review-lead.jpg?quality=75&w=1080',
-        rating: 5,
-        reviews: 324,
-        description: 'Intel i9, RTX 4090, 32GB RAM, 1TB SSD',
-        specs: {
-            'Processor': 'Intel Core i9-12th Gen',
-            'Graphics': 'NVIDIA RTX 4090',
-            'RAM': '32GB DDR5',
-            'Storage': '1TB NVMe SSD',
-            'Display': '17.3" 240Hz IPS',
-            'Weight': '2.7 kg'
-        }
-    },
-    {
-        id: 6,
-        name: 'Lenovo ThinkPad X1',
-        category: 'business',
-        price: 1299,
-        originalPrice: 1499,
-        badge: 'Sale',
-        image: 'https://m.media-amazon.com/images/I/61GSvJjxBuL.jpg',
-        rating: 4,
-        reviews: 201,
-        description: 'Intel i7, 16GB RAM, 512GB SSD, 14" FHD',
-        specs: {
-            'Processor': 'Intel Core i7-13th Gen',
-            'Graphics': 'Intel Iris Xe',
-            'RAM': '16GB DDR5',
-            'Storage': '512GB SSD',
-            'Display': '14" FHD IPS',
-            'Weight': '1.18 kg'
-        }
-    },
-    {
-        id: 7,
-        name: 'ASUS ZenBook 14',
-        category: 'ultrabook',
-        price: 999,
-        originalPrice: 1199,
-        badge: null,
-        image: 'https://wifihifi.com/wp-content/uploads/2024/03/Understated-clean-design-with-light-metals-and-no-seams.jpg',
-        rating: 5,
-        reviews: 167,
-        description: 'Intel i7, 16GB RAM, 512GB SSD, 14" OLED',
-        specs: {
-            'Processor': 'Intel Core i7-13th Gen',
-            'Graphics': 'Intel Iris Xe',
-            'RAM': '16GB LPDDR5',
-            'Storage': '512GB SSD',
-            'Display': '14" OLED 2.8K',
-            'Weight': '1.19 kg'
-        }
-    },
-    {
-        id: 8,
-        name: 'Acer Aspire 5',
-        category: 'budget',
-        price: 699,
-        originalPrice: null,
-        badge: null,
-        image: 'https://m.media-amazon.com/images/I/71vvXGmdKWL.jpg',
-        rating: 3,
-        reviews: 73,
-        description: 'AMD Ryzen 7, 8GB RAM, 512GB SSD',
-        specs: {
-            'Processor': 'AMD Ryzen 7 5700U',
-            'Graphics': 'Radeon Graphics',
-            'RAM': '8GB DDR4',
-            'Storage': '512GB SSD',
-            'Display': '15.6" FHD IPS',
-            'Weight': '1.9 kg'
-        }
-    },
-    {
-        id: 9,
-        name: 'Razer Blade 15',
-        category: 'gaming',
-        price: 2199,
-        originalPrice: 2499,
-        badge: 'Hot',
-        image: 'https://thetechrevolutionist.com/wp-content/uploads/2019/08/IMG_20190803_153212.jpg',
-        rating: 5,
-        reviews: 289,
-        description: 'Intel i7, RTX 4070, 16GB RAM, 512GB SSD',
-        specs: {
-            'Processor': 'Intel Core i7-13th Gen',
-            'Graphics': 'NVIDIA RTX 4070',
-            'RAM': '16GB DDR5',
-            'Storage': '512GB SSD',
-            'Display': '15.6" 144Hz QHD',
-            'Weight': '2.01 kg'
-        }
-    },
-    {
-        id: 10,
-        name: 'HP EliteBook 840',
-        category: 'business',
-        price: 1599,
-        originalPrice: 1899,
-        badge: null,
-        image: 'https://images.pcliquidations.com/images/isaac/152/152094t550.jpg',
-        rating: 4,
-        reviews: 145,
-        description: 'Intel i7, 16GB RAM, 512GB SSD, 14" FHD',
-        specs: {
-            'Processor': 'Intel Core i7-11th Gen',
-            'Graphics': 'Intel Iris Xe',
-            'RAM': '16GB DDR4',
-            'Storage': '512GB SSD',
-            'Display': '14" FHD IPS',
-            'Weight': '1.36 kg'
-        }
-    },
-    {
-        id: 11,
-        name: 'LG Gram 17',
-        category: 'ultrabook',
-        price: 1299,
-        originalPrice: 1599,
-        badge: 'New',
-        image: 'https://media.wired.com/photos/6671dc7254566d243dc60580/master/pass/LG-Gram-Pro-Laptop-front-Abstract-Background-SOURCE-LG.jpg',
-        rating: 5,
-        reviews: 198,
-        description: 'Intel i7, 16GB RAM, 512GB SSD, 17" OLED',
-        specs: {
-            'Processor': 'Intel Core i7-13th Gen',
-            'Graphics': 'Intel Iris Xe',
-            'RAM': '16GB DDR5',
-            'Storage': '512GB SSD',
-            'Display': '17" OLED',
-            'Weight': '1.35 kg'
-        }
-    },
-    {
-        id: 12,
-        name: 'Asus VivoBook 14',
-        category: 'budget',
-        price: 479,
-        originalPrice: 599,
-        badge: 'Sale',
-        image: 'https://bmsc-cambodia.com/wp-content/uploads/2024/11/ASUS-Vivobook-14-X1400KA-EK196W.webp',
-        rating: 4,
-        reviews: 156,
-        description: 'AMD Ryzen 5, 8GB RAM, 256GB SSD',
-        specs: {
-            'Processor': 'AMD Ryzen 5 5500U',
-            'Graphics': 'Radeon Graphics',
-            'RAM': '8GB DDR4',
-            'Storage': '256GB SSD',
-            'Display': '14" FHD IPS',
-            'Weight': '1.4 kg'
-        }
-    },
-    {
-        id: 13,
-        name: 'ASUS TUF Gaming A16',
-        category: 'gaming',
-        price: 1899,
-        originalPrice: 2199,
-        badge: null,
-        image: 'https://www.asus.com/media/Oled-2.png',
-        rating: 5,
-        reviews: 267,
-        description: 'Intel i9, RTX 4070, 32GB RAM, 1TB SSD',
-        specs: {
-            'Processor': 'Intel Core i9-13th Gen',
-            'Graphics': 'NVIDIA RTX 4070',
-            'RAM': '32GB DDR5',
-            'Storage': '1TB SSD',
-            'Display': '16" 240Hz IPS',
-            'Weight': '2.5 kg'
-        }
-    },
-    {
-        id: 14,
-        name: 'Dell Latitude 5550',
-        category: 'business',
         price: 1099,
-        originalPrice: 1299,
-        badge: 'Hot',
-        image: 'https://i.dell.com/is/image/DellContent/contexts/zinc/hero-sections/open-graph/Dell_Latitude_5550_social-media.jpg',
-        rating: 4,
-        reviews: 134,
-        description: 'Intel i5, 8GB RAM, 256GB SSD, 15.6" FHD',
-        specs: {
-            'Processor': 'Intel Core i5-13th Gen',
-            'Graphics': 'Intel UHD Graphics',
-            'RAM': '8GB DDR5',
-            'Storage': '256GB SSD',
-            'Display': '15.6" FHD IPS',
-            'Weight': '1.64 kg'
-        }
-    },
-    {
-        id: 15,
-        name: 'MacBook Air M2',
-        category: 'ultrabook',
-        price: 1599,
-        originalPrice: 1799,
-        badge: 'New',
-        image: 'https://www.apple.com/macbook-air/images/overview/performance_image__c1kdhkq5n2cy_large.jpg',
+        originalPrice: null,
+        badge: 'Popular',
+        image: 'image/laptop/Apple MacBook Air M4.png',
         rating: 5,
-        reviews: 456,
-        description: 'M2 Chip, 8GB RAM, 256GB SSD, 13" Retina',
+        reviews: 128,
+        description: 'Apple M3 Chip, 13.6" Liquid Retina, 8GB Unified RAM, 256GB SSD',
         specs: {
-            'Processor': 'Apple M2',
+            'Processor': 'Apple M3 (8-core CPU)',
             'Graphics': '10-core GPU',
             'RAM': '8GB Unified Memory',
-            'Storage': '256GB SSD',
-            'Display': '13.6" Liquid Retina',
+            'Storage': '256GB NVMe SSD',
+            'Display': '13.6" Liquid Retina Display',
             'Weight': '1.24 kg'
         }
     },
     {
-        id: 16,
-        name: 'Lenovo Yoga Slim 7',
-        category: 'budget',
-        price: 799,
-        originalPrice: 999,
+        id: 102,
+        name: 'Dell XPS 13 Plus',
+        brand: 'Dell',
+        category: 'business',
+        price: 1299,
+        originalPrice: 1420,
         badge: 'Sale',
-        image: 'https://p3-ofp.static.pub/fes/cms/2022/12/20/p8q1kydszu0hxyqp8zf2zxfbvvgh59.png',
-        rating: 4,
-        reviews: 189,
-        description: 'AMD Ryzen 7, 16GB RAM, 512GB SSD',
+        image: 'image/laptop/Dell XPS 13.png',
+        rating: 5,
+        reviews: 95,
+        description: 'Intel Core i7-1360P, 16GB LPDDR5, 512GB SSD, 13.4" FHD+ InfinityEdge',
         specs: {
-            'Processor': 'AMD Ryzen 7 5700U',
-            'Graphics': 'Radeon Graphics',
-            'RAM': '16GB DDR4',
-            'Storage': '512GB SSD',
-            'Display': '14" FHD IPS',
+            'Processor': 'Intel Core i7-1360P',
+            'Graphics': 'Intel Iris Xe Graphics',
+            'RAM': '16GB LPDDR5 6000MHz',
+            'Storage': '512GB PCIe 4.0 NVMe',
+            'Display': '13.4" FHD+ (1920x1200) 500 nits',
+            'Weight': '1.23 kg'
+        }
+    },
+    {
+        id: 103,
+        name: 'HP Spectre x360 14',
+        brand: 'HP',
+        category: '2in1',
+        price: 1199,
+        originalPrice: 1399,
+        badge: '2-in-1',
+        image: 'image/laptop/HP Spectre x360 14.png',
+        rating: 5,
+        reviews: 87,
+        description: 'Intel Core Ultra 7 155H, 16GB LPDDR5x, 512GB SSD, 14.0" 2.8K OLED Touch',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 155H',
+            'Graphics': 'Intel Arc Graphics',
+            'RAM': '16GB LPDDR5x 7467MHz',
+            'Storage': '512GB PCIe Gen4 NVMe',
+            'Display': '14" 2.8K OLED 120Hz Touch',
+            'Weight': '1.44 kg'
+        }
+    },
+    {
+        id: 104,
+        name: 'Lenovo ThinkPad X1 Carbon',
+        brand: 'Lenovo',
+        category: 'business',
+        price: 1249,
+        originalPrice: 1499,
+        badge: 'Top Pick',
+        image: 'image/laptop/Lenovo ThinkPad X1 Carbon Gen 13.png',
+        rating: 5,
+        reviews: 74,
+        description: 'Intel Core i7-1365U vPro, 16GB LPDDR5, 512GB SSD, 14.0" WUXGA Ultralight',
+        specs: {
+            'Processor': 'Intel Core i7-1365U vPro',
+            'Graphics': 'Intel Iris Xe',
+            'RAM': '16GB LPDDR5',
+            'Storage': '512GB Performance SSD',
+            'Display': '14.0" WUXGA (1920 x 1200) IPS',
+            'Weight': '1.12 kg'
+        }
+    },
+    {
+        id: 105,
+        name: 'ASUS ROG Zephyrus G14',
+        brand: 'ASUS',
+        category: 'gaming',
+        price: 1599,
+        originalPrice: 1899,
+        badge: 'Gaming',
+        image: 'image/laptop/ASUS ROG Strix G16.png',
+        rating: 5,
+        reviews: 165,
+        description: 'AMD Ryzen 9 8945HS, RTX 4060, 16GB LPDDR5X, 1TB SSD, 14.0" 3K OLED 120Hz',
+        specs: {
+            'Processor': 'AMD Ryzen 9 8945HS (8-core/16-thread)',
+            'Graphics': 'NVIDIA GeForce RTX 4060 8GB GDDR6',
+            'RAM': '16GB LPDDR5X 6400MHz',
+            'Storage': '1TB PCIe 4.0 NVMe SSD',
+            'Display': '14.0" 3K (2880 x 1800) OLED 120Hz',
+            'Weight': '1.50 kg'
+        }
+    }
+];
+
+// Product Data - Featured Laptops Catalog (30 Models Across 6 Categories)
+const defaultProducts = [
+    // ==================== 1. ULTRABOOKS ====================
+    {
+        id: 1,
+        name: 'ASUS Zenbook 14 OLED (UX3405)',
+        brand: 'ASUS',
+        category: 'ultrabook',
+        price: 1299,
+        originalPrice: 1499,
+        badge: 'OLED Flagship',
+        image: 'image/laptop/ASUS Zenbook 14 OLED (UX3405).png',
+        rating: 5,
+        reviews: 142,
+        description: 'Intel Core Ultra 7 155H, 16GB LPDDR5X, 1TB SSD, 14" 3K OLED 120Hz display with ultra-slim all-metal chassis.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 155H (16 cores, up to 4.8 GHz)',
+            'Graphics': 'Intel Arc Graphics',
+            'RAM': '16GB LPDDR5X 7467MHz',
+            'Storage': '1TB M.2 NVMe PCIe 4.0 SSD',
+            'Display': '14.0" 3K (2880 x 1800) OLED 16:10 120Hz 500 nits',
+            'Weight': '1.20 kg'
+        }
+    },
+    {
+        id: 2,
+        name: 'Dell XPS 13',
+        brand: 'Dell',
+        category: 'ultrabook',
+        price: 1199,
+        originalPrice: 1399,
+        badge: 'Ultra Thin',
+        image: 'image/laptop/Dell XPS 13.png',
+        rating: 5,
+        reviews: 98,
+        description: 'Intel Core Ultra 7 155H, 16GB LPDDR5x, 512GB SSD, 13.4" FHD+ InfinityEdge display, CNC aluminum chassis.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 155H',
+            'Graphics': 'Intel Arc Graphics',
+            'RAM': '16GB LPDDR5x 7467MHz',
+            'Storage': '512GB PCIe 4.0 NVMe SSD',
+            'Display': '13.4" FHD+ (1920 x 1200) InfinityEdge 500 nits',
+            'Weight': '1.19 kg'
+        }
+    },
+    {
+        id: 3,
+        name: 'Apple MacBook Air M4',
+        brand: 'Apple',
+        category: 'ultrabook',
+        price: 1099,
+        originalPrice: 1199,
+        badge: 'Apple Silicon',
+        image: 'image/laptop/Apple MacBook Air M4.png',
+        rating: 5,
+        reviews: 165,
+        description: 'Apple M4 Chip (10-core CPU, 10-core GPU), 16GB Unified Memory, 512GB SSD, 13.6" Liquid Retina Display.',
+        specs: {
+            'Processor': 'Apple M4 Chip with 10-core CPU & 16-core Neural Engine',
+            'Graphics': '10-core GPU with hardware-accelerated ray tracing',
+            'RAM': '16GB Unified Memory',
+            'Storage': '512GB Ultra-Fast SSD',
+            'Display': '13.6" Liquid Retina (2560 x 1664) True Tone 500 nits',
+            'Weight': '1.24 kg'
+        }
+    },
+    {
+        id: 4,
+        name: 'HP Spectre x360 14',
+        brand: 'HP',
+        category: 'ultrabook',
+        price: 1399,
+        originalPrice: 1599,
+        badge: 'Premium Slim',
+        image: 'image/laptop/HP Spectre x360 14.png',
+        rating: 5,
+        reviews: 86,
+        description: 'Intel Core Ultra 7 155H, 16GB LPDDR5x, 1TB SSD, 14.0" 2.8K OLED 120Hz display with 9MP AI camera.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 155H (16 cores, up to 4.8 GHz)',
+            'Graphics': 'Intel Arc Graphics',
+            'RAM': '16GB LPDDR5x 7467MHz',
+            'Storage': '1TB PCIe Gen4 NVMe TLC M.2 SSD',
+            'Display': '14.0" 2.8K (2880 x 1800) OLED 120Hz 500 nits HDR',
+            'Weight': '1.44 kg'
+        }
+    },
+    {
+        id: 5,
+        name: 'Lenovo Yoga Slim 7i',
+        brand: 'Lenovo',
+        category: 'ultrabook',
+        price: 1049,
+        originalPrice: 1249,
+        badge: 'Aura Edition',
+        image: 'image/laptop/lenovo yoga slim 7i.png',
+        rating: 5,
+        reviews: 92,
+        description: 'Intel Core Ultra 7 155H, 32GB LPDDR5X, 1TB SSD, 14.0" WUXGA OLED 100% DCI-P3 aluminum slim design.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 155H (16 cores, up to 4.8 GHz)',
+            'Graphics': 'Intel Arc Graphics',
+            'RAM': '32GB LPDDR5X 7467MHz',
+            'Storage': '1TB M.2 PCIe 4.0 NVMe SSD',
+            'Display': '14.0" WUXGA (1920 x 1200) OLED 400 nits 100% DCI-P3',
+            'Weight': '1.39 kg'
+        }
+    },
+
+    // ==================== 2. GAMING LAPTOPS ====================
+    {
+        id: 6,
+        name: 'ASUS ROG Strix G16',
+        brand: 'ASUS',
+        category: 'gaming',
+        price: 1599,
+        originalPrice: 1799,
+        badge: 'RTX 4070',
+        image: 'image/laptop/ASUS ROG Strix G16.png',
+        rating: 5,
+        reviews: 178,
+        description: 'Intel Core i9-14900HX, NVIDIA RTX 4070 8GB, 16GB DDR5, 1TB SSD, 16" QHD+ 240Hz ROG Nebula Display.',
+        specs: {
+            'Processor': 'Intel Core i9-14900HX (24 cores / 32 threads, up to 5.8 GHz)',
+            'Graphics': 'NVIDIA GeForce RTX 4070 Laptop GPU 8GB GDDR6 (140W TGP)',
+            'RAM': '16GB DDR5-5600MHz (expandable to 64GB)',
+            'Storage': '1TB PCIe 4.0 NVMe M.2 SSD',
+            'Display': '16" QHD+ (2560 x 1600) ROG Nebula 240Hz 3ms 100% DCI-P3',
+            'Weight': '2.50 kg'
+        }
+    },
+    {
+        id: 7,
+        name: 'Acer Predator Helios Neo 16',
+        brand: 'Acer',
+        category: 'gaming',
+        price: 1349,
+        originalPrice: 1499,
+        badge: 'High FPS',
+        image: 'image/laptop/Acer Predator Helios Neo 16.png',
+        rating: 5,
+        reviews: 130,
+        description: 'Intel Core i7-14700HX, NVIDIA RTX 4060 8GB, 16GB DDR5, 1TB SSD, 16" WQXGA 165Hz IPS Display.',
+        specs: {
+            'Processor': 'Intel Core i7-14700HX (20 cores / 28 threads, up to 5.5 GHz)',
+            'Graphics': 'NVIDIA GeForce RTX 4060 8GB GDDR6 (140W MGP)',
+            'RAM': '16GB DDR5 5600MHz',
+            'Storage': '1TB PCIe Gen4 NVMe SSD',
+            'Display': '16.0" WQXGA (2560 x 1600) IPS 165Hz 500 nits 100% sRGB',
+            'Weight': '2.60 kg'
+        }
+    },
+    {
+        id: 8,
+        name: 'MSI Katana 15',
+        brand: 'MSI',
+        category: 'gaming',
+        price: 1199,
+        originalPrice: 1399,
+        badge: 'GeForce RTX',
+        image: 'image/laptop/MSI Katana 15.png',
+        rating: 5,
+        reviews: 118,
+        description: 'Intel Core i7-13620H, NVIDIA RTX 4060 8GB, 16GB DDR5, 1TB SSD, 15.6" FHD 144Hz 4-Zone RGB Keyboard.',
+        specs: {
+            'Processor': 'Intel Core i7-13620H (10 cores, up to 4.9 GHz)',
+            'Graphics': 'NVIDIA GeForce RTX 4060 Laptop GPU 8GB GDDR6 (105W)',
+            'RAM': '16GB DDR5 5200MHz',
+            'Storage': '1TB NVMe PCIe SSD Gen4x4',
+            'Display': '15.6" FHD (1920x1080) 144Hz IPS-Level Display',
+            'Weight': '2.25 kg'
+        }
+    },
+    {
+        id: 9,
+        name: 'Lenovo Legion Pro 5i',
+        brand: 'Lenovo',
+        category: 'gaming',
+        price: 1499,
+        originalPrice: 1699,
+        badge: 'Esports Ready',
+        image: 'image/laptop/Lenovo Legion Pro 5i.png',
+        rating: 5,
+        reviews: 154,
+        description: 'Intel Core i9-14900HX, NVIDIA RTX 4070 8GB, 32GB DDR5, 1TB SSD, 16" WQXGA 240Hz 500nits PureSight.',
+        specs: {
+            'Processor': 'Intel Core i9-14900HX (24 cores, up to 5.8 GHz)',
+            'Graphics': 'NVIDIA GeForce RTX 4070 8GB GDDR6 (140W)',
+            'RAM': '32GB DDR5 5600MHz (Dual Channel)',
+            'Storage': '1TB M.2 2280 PCIe 4.0 NVMe SSD',
+            'Display': '16" WQXGA (2560x1600) IPS 240Hz 500nits 100% sRGB DisplayHDR 400',
+            'Weight': '2.50 kg'
+        }
+    },
+    {
+        id: 10,
+        name: 'Alienware m16 R2',
+        brand: 'Dell',
+        category: 'gaming',
+        price: 1799,
+        originalPrice: 1999,
+        badge: 'Extreme Power',
+        image: 'image/laptop/Alienware m16 R2.png',
+        rating: 5,
+        reviews: 95,
+        description: 'Intel Core Ultra 9 185H, NVIDIA RTX 4070 8GB, 32GB DDR5, 1TB SSD, 16" QHD+ 240Hz Cryo-tech cooling.',
+        specs: {
+            'Processor': 'Intel Core Ultra 9 185H (16 cores, up to 5.1 GHz)',
+            'Graphics': 'NVIDIA GeForce RTX 4070 8GB GDDR6 (140W)',
+            'RAM': '32GB DDR5 5600MT/s',
+            'Storage': '1TB M.2 PCIe NVMe SSD',
+            'Display': '16" QHD+ (2560 x 1600) 240Hz 3ms 100% sRGB ComfortView Plus',
+            'Weight': '2.61 kg'
+        }
+    },
+
+    // ==================== 3. BUSINESS LAPTOPS ====================
+    {
+        id: 11,
+        name: 'Lenovo ThinkPad X1 Carbon Gen 13',
+        brand: 'Lenovo',
+        category: 'business',
+        price: 1649,
+        originalPrice: 1899,
+        badge: 'Aura Edition',
+        image: 'image/laptop/Lenovo ThinkPad X1 Carbon Gen 13.png',
+        rating: 5,
+        reviews: 88,
+        description: 'Intel Core Ultra 7 258V Lunar Lake, 32GB LPDDR5x, 1TB SSD, 14" 2.8K OLED 120Hz, carbon fiber under 1kg.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 258V (8 cores, Intel AI Boost NPU)',
+            'Graphics': 'Intel Arc 140V GPU',
+            'RAM': '32GB LPDDR5x 8533MHz',
+            'Storage': '1TB M.2 2280 PCIe 4.0 NVMe Opal 2.0 SSD',
+            'Display': '14.0" 2.8K (2880 x 1800) OLED 120Hz 400 nits Anti-Glare 100% DCI-P3',
+            'Weight': '0.98 kg'
+        }
+    },
+    {
+        id: 12,
+        name: 'Dell Latitude 7450',
+        brand: 'Dell',
+        category: 'business',
+        price: 1429,
+        originalPrice: 1629,
+        badge: 'Enterprise AI',
+        image: 'image/laptop/Dell Latitude 7450.png',
+        rating: 5,
+        reviews: 76,
+        description: 'Intel Core Ultra 7 165U vPro, 16GB LPDDR5x, 512GB SSD, 14" FHD+ IPS display, enterprise grade security.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 165U vPro (12 cores, up to 4.9 GHz)',
+            'Graphics': 'Intel Graphics with AI Boost',
+            'RAM': '16GB LPDDR5x 6400MT/s',
+            'Storage': '512GB M.2 2230 PCIe Gen4 NVMe SSD',
+            'Display': '14.0" FHD+ (1920x1200) Anti-Glare IPS Non-Touch 400 nits',
+            'Weight': '1.33 kg'
+        }
+    },
+    {
+        id: 13,
+        name: 'HP EliteBook 840 G11',
+        brand: 'HP',
+        category: 'business',
+        price: 1349,
+        originalPrice: 1549,
+        badge: 'Sure Start',
+        image: 'image/laptop/HP EliteBook 840 G11.png',
+        rating: 5,
+        reviews: 94,
+        description: 'Intel Core Ultra 7 155H, 16GB DDR5, 512GB SSD, 14" WUXGA Anti-Glare 400 nits, HP Wolf Security.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 155H (16 cores, up to 4.8 GHz)',
+            'Graphics': 'Intel Arc Graphics',
+            'RAM': '16GB DDR5-5600 MHz RAM (supports up to 64GB)',
+            'Storage': '512GB PCIe Gen4 NVMe TLC SSD',
+            'Display': '14" WUXGA (1920 x 1200) IPS anti-glare 400 nits 100% sRGB',
+            'Weight': '1.41 kg'
+        }
+    },
+    {
+        id: 14,
+        name: 'ASUS ExpertBook B5',
+        brand: 'ASUS',
+        category: 'business',
+        price: 1299,
+        originalPrice: 1450,
+        badge: 'Ultra Secure',
+        image: 'image/laptop/ASUS ExpertBook B5.png',
+        rating: 5,
+        reviews: 65,
+        description: 'Intel Core Ultra 7 155H, 16GB DDR5, 1TB SSD, 14" 2.5K 16:10 144Hz display, military-grade MIL-STD 810H.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 155H (16 cores, up to 4.8 GHz)',
+            'Graphics': 'Intel Arc Graphics',
+            'RAM': '16GB DDR5 5600MHz (Dual SO-DIMM slots)',
+            'Storage': '1TB M.2 2280 NVMe PCIe 4.0 SSD',
+            'Display': '14.0" WQXGA (2560 x 1600) 16:10 144Hz 400 nits Anti-Glare',
+            'Weight': '1.29 kg'
+        }
+    },
+    {
+        id: 15,
+        name: 'Microsoft Surface Laptop 7',
+        brand: 'Microsoft',
+        category: 'business',
+        price: 1199,
+        originalPrice: 1399,
+        badge: 'Copilot+ PC',
+        image: 'image/laptop/Microsoft Surface Laptop 7.png',
+        rating: 5,
+        reviews: 112,
+        description: 'Snapdragon X Elite 12-core, 16GB LPDDR5x, 512GB SSD, 13.8" PixelSense Flow Touchscreen, 20hr battery life.',
+        specs: {
+            'Processor': 'Snapdragon X Elite (12 cores, 45 TOPS NPU)',
+            'Graphics': 'Qualcomm Adreno GPU',
+            'RAM': '16GB LPDDR5x RAM',
+            'Storage': '512GB Removable Gen 4 SSD',
+            'Display': '13.8" PixelSense Flow (2304 x 1536) Touch 120Hz HDR 600 nits',
+            'Weight': '1.34 kg'
+        }
+    },
+
+    // ==================== 4. 2-IN-1 LAPTOPS ====================
+    {
+        id: 16,
+        name: 'HP Spectre x360 14',
+        brand: 'HP',
+        category: '2in1',
+        price: 1449,
+        originalPrice: 1649,
+        badge: 'Convertible OLED',
+        image: 'image/laptop/HP Spectre x360 14.png',
+        rating: 5,
+        reviews: 82,
+        description: 'Intel Core Ultra 7 155H, 16GB LPDDR5x, 1TB SSD, 14.0" 2.8K OLED Touch 360° flip with tilt pen included.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 155H (16 cores, up to 4.8 GHz)',
+            'Graphics': 'Intel Arc Graphics',
+            'RAM': '16GB LPDDR5x 7467MHz',
+            'Storage': '1TB PCIe Gen4 NVMe M.2 SSD',
+            'Display': '14.0" 2.8K (2880 x 1800) OLED 120Hz Touch 500 nits HDR, 360° hinge',
+            'Weight': '1.44 kg'
+        }
+    },
+    {
+        id: 17,
+        name: 'Lenovo Yoga 9i 2-in-1',
+        brand: 'Lenovo',
+        category: '2in1',
+        price: 1499,
+        originalPrice: 1749,
+        badge: 'Bowers & Wilkins',
+        image: 'image/laptop/Lenovo Yoga 9i 2-in-1.png',
+        rating: 5,
+        reviews: 97,
+        description: 'Intel Core Ultra 7 155H, 16GB LPDDR5x, 1TB SSD, 14" 4K OLED PureSight Touch, Bowers & Wilkins soundbar hinge.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 155H (16 cores, up to 4.8 GHz)',
+            'Graphics': 'Intel Arc Graphics',
+            'RAM': '16GB LPDDR5x 7467MHz',
+            'Storage': '1TB SSD M.2 2280 PCIe 4.0 NVMe',
+            'Display': '14.0" 4K (3840 x 2400) OLED 60Hz / 2.8K 120Hz Touch 400 nits',
+            'Weight': '1.35 kg'
+        }
+    },
+    {
+        id: 18,
+        name: 'Dell Inspiron 14 2-in-1',
+        brand: 'Dell',
+        category: '2in1',
+        price: 899,
+        originalPrice: 1049,
+        badge: 'Touch 360°',
+        image: 'image/laptop/Dell Inspiron 14 2-in-1.png',
+        rating: 5,
+        reviews: 73,
+        description: 'Intel Core 7 150U, 16GB DDR5, 1TB SSD, 14.0" FHD+ 16:10 Touch Display with Active Pen support.',
+        specs: {
+            'Processor': 'Intel Core 7 150U (10 cores, up to 5.4 GHz)',
+            'Graphics': 'Intel Graphics',
+            'RAM': '16GB DDR5 5200MHz',
+            'Storage': '1TB M.2 PCIe NVMe Solid State Drive',
+            'Display': '14.0" 16:10 FHD+ (1920 x 1200) Touch ComfortView 300 nits',
+            'Weight': '1.71 kg'
+        }
+    },
+    {
+        id: 19,
+        name: 'ASUS Vivobook S 14 Flip',
+        brand: 'ASUS',
+        category: '2in1',
+        price: 849,
+        originalPrice: 999,
+        badge: 'OLED Touch',
+        image: 'image/cat-2in1.png',
+        rating: 5,
+        reviews: 89,
+        description: 'AMD Ryzen 7 7730U, 16GB DDR4, 512GB SSD, 14.0" 2.8K OLED 90Hz 16:10 Touch Corning Gorilla Glass.',
+        specs: {
+            'Processor': 'AMD Ryzen 7 7730U (8 cores / 16 threads, up to 4.5 GHz)',
+            'Graphics': 'AMD Radeon Graphics',
+            'RAM': '16GB DDR4 3200MHz',
+            'Storage': '512GB M.2 NVMe PCIe 3.0 SSD',
+            'Display': '14.0" 2.8K (2880 x 1800) OLED 90Hz 16:10 Touch 500 nits HDR',
+            'Weight': '1.50 kg'
+        }
+    },
+    {
+        id: 20,
+        name: 'Microsoft Surface Pro 11',
+        brand: 'Microsoft',
+        category: '2in1',
+        price: 999,
+        originalPrice: 1199,
+        badge: 'Snapdragon X Plus',
+        image: 'https://support.microsoft.com/en-us/surface/media/surface-pro-11th-edition.png',
+        rating: 5,
+        reviews: 140,
+        description: 'Snapdragon X Plus 10-core, 16GB RAM, 512GB SSD, 13" PixelSense Flow OLED 120Hz 2-in-1 Tablet + Laptop.',
+        specs: {
+            'Processor': 'Snapdragon X Plus (10 cores, up to 3.4 GHz, 45 TOPS NPU)',
+            'Graphics': 'Qualcomm Adreno GPU',
+            'RAM': '16GB LPDDR5x RAM',
+            'Storage': '512GB Removable Gen 4 SSD',
+            'Display': '13.0" OLED PixelSense Flow (2880 x 1920) 120Hz Touch 600 nits',
+            'Weight': '0.89 kg'
+        }
+    },
+
+    // ==================== 5. STUDENT LAPTOPS ====================
+    {
+        id: 21,
+        name: 'Acer Aspire 5',
+        brand: 'Acer',
+        category: 'budget',
+        price: 549,
+        originalPrice: 649,
+        badge: 'Best Value',
+        image: 'image/laptop/Acer Aspire 5.png',
+        rating: 5,
+        reviews: 162,
+        description: 'Intel Core i5-1335U, 16GB LPDDR5, 512GB SSD, 15.6" Full HD IPS Slim Bezel Display with Wi-Fi 6E.',
+        specs: {
+            'Processor': 'Intel Core i5-1335U (10 cores, up to 4.6 GHz)',
+            'Graphics': 'Intel Iris Xe Graphics',
+            'RAM': '16GB LPDDR5 Dual-Channel',
+            'Storage': '512GB PCIe Gen4 NVMe SSD',
+            'Display': '15.6" Full HD (1920 x 1080) IPS Acer ComfyView LED-backlit',
+            'Weight': '1.77 kg'
+        }
+    },
+    {
+        id: 22,
+        name: 'ASUS Vivobook 15',
+        brand: 'ASUS',
+        category: 'budget',
+        price: 599,
+        originalPrice: 699,
+        badge: 'Student Favorite',
+        image: 'image/laptop/ASUS Vivobook 15.png',
+        rating: 5,
+        reviews: 180,
+        description: 'Intel Core i5-1335U, 16GB DDR4, 512GB SSD, 15.6" FHD NanoEdge Anti-Glare Display with 180° lay-flat hinge.',
+        specs: {
+            'Processor': 'Intel Core i5-1335U (10 cores, up to 4.6 GHz)',
+            'Graphics': 'Intel Iris Xe Graphics',
+            'RAM': '16GB DDR4 3200MHz',
+            'Storage': '512GB M.2 NVMe PCIe 3.0 SSD',
+            'Display': '15.6" FHD (1920 x 1080) NanoEdge Anti-Glare 250 nits',
+            'Weight': '1.70 kg'
+        }
+    },
+    {
+        id: 23,
+        name: 'Lenovo IdeaPad Slim 3',
+        brand: 'Lenovo',
+        category: 'budget',
+        price: 529,
+        originalPrice: 629,
+        badge: 'All-Day Battery',
+        image: 'image/laptop/Lenovo IdeaPad Slim 3.png',
+        rating: 5,
+        reviews: 132,
+        description: 'AMD Ryzen 5 7530U, 16GB DDR4, 512GB SSD, 15.6" FHD IPS Display with Dolby Audio and Rapid Charge.',
+        specs: {
+            'Processor': 'AMD Ryzen 5 7530U (6 cores / 12 threads, up to 4.5 GHz)',
+            'Graphics': 'Integrated AMD Radeon Graphics',
+            'RAM': '16GB Soldered DDR4-3200',
+            'Storage': '512GB SSD M.2 2242 PCIe 4.0x4 NVMe',
+            'Display': '15.6" FHD (1920x1080) IPS 300nits Anti-glare',
+            'Weight': '1.62 kg'
+        }
+    },
+    {
+        id: 24,
+        name: 'HP Pavilion 15',
+        brand: 'HP',
+        category: 'budget',
+        price: 629,
+        originalPrice: 749,
+        badge: 'Fast Charging',
+        image: 'image/laptop/HP Pavilion 15.png',
+        rating: 5,
+        reviews: 104,
+        description: 'Intel Core i5-1335U, 16GB DDR4, 512GB SSD, 15.6" FHD Micro-Edge Display, B&O Audio, lightweight body.',
+        specs: {
+            'Processor': 'Intel Core i5-1335U (10 cores, up to 4.6 GHz)',
+            'Graphics': 'Intel Iris Xe Graphics',
+            'RAM': '16GB DDR4-3200 MHz RAM (2 x 8 GB)',
+            'Storage': '512GB PCIe NVMe M.2 SSD',
+            'Display': '15.6" FHD (1920 x 1080) IPS micro-edge 250 nits',
+            'Weight': '1.75 kg'
+        }
+    },
+    {
+        id: 25,
+        name: 'Dell Inspiron 15 3530',
+        brand: 'Dell',
+        category: 'budget',
+        price: 569,
+        originalPrice: 679,
+        badge: 'Reliable Core',
+        image: 'image/laptop/Dell Inspiron 15 3530.png',
+        rating: 5,
+        reviews: 95,
+        description: 'Intel Core i5-1334U, 16GB DDR4, 512GB SSD, 15.6" FHD 120Hz Anti-Glare Display with numeric keypad.',
+        specs: {
+            'Processor': 'Intel Core i5-1334U (10 cores, up to 4.60 GHz)',
+            'Graphics': 'Intel Iris Xe Graphics',
+            'RAM': '16GB DDR4 2666MHz',
+            'Storage': '512GB M.2 PCIe NVMe Solid State Drive',
+            'Display': '15.6" FHD (1920 x 1080) 120Hz WVA Anti-Glare 250 nits',
             'Weight': '1.65 kg'
+        }
+    },
+
+    // ==================== 6. WORKSTATIONS ====================
+    {
+        id: 26,
+        name: 'Dell Precision 7680',
+        brand: 'Dell',
+        category: 'workstation',
+        price: 2399,
+        originalPrice: 2699,
+        badge: 'ISV Certified',
+        image: 'image/laptop/Dell Precision 7680.png',
+        rating: 5,
+        reviews: 58,
+        description: 'Intel Core i9-13950HX vPro, NVIDIA RTX 3500 Ada 12GB, 64GB DDR5, 1TB SSD, 16.0" FHD+ 500 nits CAMM memory.',
+        specs: {
+            'Processor': 'Intel Core i9-13950HX vPro (24 cores, up to 5.50 GHz)',
+            'Graphics': 'NVIDIA RTX 3500 Ada Generation 12GB GDDR6',
+            'RAM': '64GB CAMM DDR5 5600MHz Non-ECC',
+            'Storage': '1TB PCIe NVMe Class 40 M.2 SSD',
+            'Display': '16.0" FHD+ 1920x1200, 60Hz, Anti-Glare, Non-Touch, 100% DCI-P3, 500 nits',
+            'Weight': '2.60 kg'
+        }
+    },
+    {
+        id: 27,
+        name: 'Lenovo ThinkPad P16 Gen 2',
+        brand: 'Lenovo',
+        category: 'workstation',
+        price: 2199,
+        originalPrice: 2499,
+        badge: 'Workstation',
+        image: 'image/laptop/Lenovo ThinkPad P16 Gen 2 .png',
+        rating: 5,
+        reviews: 64,
+        description: 'Intel Core i9-13980HX, NVIDIA RTX 4080 12GB, 32GB DDR5, 1TB SSD, 16.0" 4K OLED 500 nits professional workstation.',
+        specs: {
+            'Processor': 'Intel Core i9-13980HX (24 cores, up to 5.60 GHz)',
+            'Graphics': 'NVIDIA GeForce RTX 4080 Laptop GPU 12GB GDDR6',
+            'RAM': '32GB DDR5-5600MHz (Supports up to 192GB)',
+            'Storage': '1TB SSD M.2 2280 PCIe Gen4 Performance TLC Opal',
+            'Display': '16.0" WQUXGA (3840 x 2400) OLED Touch 100% DCI-P3 500 nits',
+            'Weight': '2.95 kg'
+        }
+    },
+    {
+        id: 28,
+        name: 'HP ZBook Fury 16 G11',
+        brand: 'HP',
+        category: 'workstation',
+        price: 2599,
+        originalPrice: 2899,
+        badge: 'Max Performance',
+        image: 'image/laptop/HP ZBook Fury 16 G11.png',
+        rating: 5,
+        reviews: 52,
+        description: 'Intel Core i9-14900HX, NVIDIA RTX 4000 Ada 12GB, 64GB DDR5, 2TB SSD, 16.0" 4K OLED Touch HP DreamColor.',
+        specs: {
+            'Processor': 'Intel Core i9-14900HX (24 cores / 32 threads, up to 5.8 GHz)',
+            'Graphics': 'NVIDIA RTX 4000 Ada Generation Laptop GPU (12GB GDDR6)',
+            'RAM': '64GB DDR5-5600 MHz RAM (2 x 32GB, up to 128GB)',
+            'Storage': '2TB PCIe Gen4 NVMe TLC M.2 SSD',
+            'Display': '16" 4K UHD (3840 x 2400) OLED Touch, 100% DCI-P3, HP DreamColor',
+            'Weight': '2.40 kg'
+        }
+    },
+    {
+        id: 29,
+        name: 'ASUS ProArt P16',
+        brand: 'ASUS',
+        category: 'workstation',
+        price: 1999,
+        originalPrice: 2299,
+        badge: 'Creator Dial',
+        image: 'image/laptop/ASUS ProArt P16.png',
+        rating: 5,
+        reviews: 72,
+        description: 'AMD Ryzen AI 9 HX 370, NVIDIA RTX 4070 8GB, 32GB LPDDR5X, 2TB SSD, 16" 4K OLED 16:10 Touch with ASUS DialPad.',
+        specs: {
+            'Processor': 'AMD Ryzen AI 9 HX 370 (12 cores / 24 threads, up to 5.1 GHz, 50 TOPS NPU)',
+            'Graphics': 'NVIDIA GeForce RTX 4070 Laptop GPU 8GB GDDR6',
+            'RAM': '32GB LPDDR5X on board',
+            'Storage': '2TB M.2 NVMe PCIe 4.0 Performance SSD',
+            'Display': '16.0" 4K (3840 x 2400) OLED 16:10 Touch 500 nits HDR True Black 500',
+            'Weight': '1.85 kg'
+        }
+    },
+    {
+        id: 30,
+        name: 'MSI CreatorPro X17',
+        brand: 'MSI',
+        category: 'workstation',
+        price: 2799,
+        originalPrice: 3199,
+        badge: 'HX Powerhouse',
+        image: 'image/laptop/MSI CreatorPro X17.png',
+        rating: 5,
+        reviews: 44,
+        description: 'Intel Core i9-13980HX, NVIDIA RTX 5000 Ada 16GB, 64GB DDR5, 2TB SSD, 17.3" 4K Mini-LED 144Hz 1000 nits display.',
+        specs: {
+            'Processor': 'Intel Core i9-13980HX (24 cores, up to 5.60 GHz)',
+            'Graphics': 'NVIDIA RTX 5000 Ada Generation Laptop GPU 16GB GDDR6',
+            'RAM': '64GB DDR5 5600MHz (4 slots, up to 128GB)',
+            'Storage': '2TB NVMe PCIe Gen5 SSD',
+            'Display': '17.3" UHD (3840x2160) 144Hz Mini LED, HDR 1000, 100% DCI-P3',
+            'Weight': '3.30 kg'
         }
     }
 ];
 
 // ==================== PRODUCT PERSISTENCE & STORE INITIALIZATION ====================
 function getStoredProducts() {
-    const stored = localStorage.getItem('kh_products');
+    const STORE_KEY = 'kh_products_v12_laptop_all_images';
+    const stored = localStorage.getItem(STORE_KEY);
     if (stored) {
         try {
             const parsed = JSON.parse(stored);
-            if (Array.isArray(parsed) && parsed.length > 0) {
+            if (Array.isArray(parsed) && parsed.length >= 30) {
                 return parsed;
             }
         } catch (e) {
-            console.error('Failed to parse kh_products from localStorage', e);
+            console.error('Failed to parse kh_products_v12_laptop_all_images from localStorage', e);
         }
     }
+    localStorage.setItem(STORE_KEY, JSON.stringify(defaultProducts));
     localStorage.setItem('kh_products', JSON.stringify(defaultProducts));
     return defaultProducts.slice();
 }
 
 function saveStoredProducts(productsList) {
+    localStorage.setItem('kh_products_v12_laptop_all_images', JSON.stringify(productsList));
     localStorage.setItem('kh_products', JSON.stringify(productsList));
     allProducts = productsList;
 }
 
 let allProducts = getStoredProducts();
-let displayedCount = 8;
+let displayedCount = 30;
 let products = allProducts.slice(0, displayedCount);
+
+// Helper function to add product to cart safely across all interfaces
+function addProductToCart(productId) {
+    const list = (typeof allProducts !== 'undefined' && allProducts.length > 0) ? allProducts : defaultProducts;
+    let product = list.find(p => p.id == productId);
+    if (!product && typeof defaultProducts !== 'undefined') {
+        product = defaultProducts.find(p => p.id == productId);
+    }
+    if (!product && typeof popularProducts !== 'undefined') {
+        product = popularProducts.find(p => p.id == productId);
+    }
+    if (!product && typeof categoryFlagshipProducts !== 'undefined') {
+        product = Object.values(categoryFlagshipProducts).find(p => p.id == productId);
+    }
+    if (!product) return;
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existing = cart.find(item => item.id == productId);
+    if (existing) {
+        existing.quantity = (existing.quantity || 1) + 1;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            quantity: 1
+        });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    cartCount = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+    localStorage.setItem('cartCount', cartCount);
+    if (typeof updateCartBadge === 'function') updateCartBadge();
+    if (typeof showNotification === 'function') {
+        showNotification(`${product.name} added to cart! 🛒`);
+    }
+}
+window.addProductToCart = addProductToCart;
+
+// Helper to open details by product ID (used by both static and dynamic cards)
+function openProductDetailById(id) {
+    const list = (typeof allProducts !== 'undefined' && allProducts.length > 0) ? allProducts : defaultProducts;
+    let p = list.find(item => item.id == id);
+    if (!p && typeof defaultProducts !== 'undefined') {
+        p = defaultProducts.find(item => item.id == id);
+    }
+    if (!p && typeof popularProducts !== 'undefined') {
+        p = popularProducts.find(item => item.id == id);
+    }
+    if (!p && typeof categoryFlagshipProducts !== 'undefined') {
+        p = Object.values(categoryFlagshipProducts).find(item => item.id == id);
+    }
+    if (p) openProductDetail(p);
+}
+window.openProductDetailById = openProductDetailById;
 
 // ==================== RENDER PRODUCTS ====================
 function renderProducts() {
     const grid = document.getElementById('productsGrid');
     if (!grid) return;
+
     grid.innerHTML = '';
 
     // Update current product slice
-    products = allProducts.slice(0, displayedCount);
+    products = (allProducts || []).slice(0, displayedCount);
 
-    const currentUser = getCurrentUser();
+    const loadMoreBtn = document.querySelector('.load-more-btn');
+    if (!products || products.length === 0) {
+        if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+        return;
+    }
+    if (loadMoreBtn) {
+        loadMoreBtn.style.display = (allProducts && products.length >= allProducts.length) ? 'none' : 'block';
+    }
+
+    const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
     const isAdmin = currentUser && currentUser.role === 'admin';
 
     products.forEach(product => {
         const card = document.createElement('div');
         card.className = 'product-card';
         card.setAttribute('data-category', product.category);
+        card.setAttribute('data-id', product.id);
         card.innerHTML = `
             <div class="product-image">
-                <img src="${product.image}" alt="${product.name}">
+                <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null; this.src='image/cat-${product.category || 'ultrabook'}.png'">
                 ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
                 ${isAdmin ? `<div class="admin-quick-badge"><i class="fa-solid fa-shield-halved"></i> Admin Control</div>` : ''}
                 <button class="wishlist-btn" data-product-id="${product.id}" onclick="toggleWishlist(event)">♡</button>
@@ -1558,16 +2188,217 @@ function renderProducts() {
     });
 }
 
+// Run render immediately if DOM is already parsed
+if (typeof document !== 'undefined' && document.getElementById('productsGrid')) {
+    try { renderProducts(); } catch (e) { console.error('Immediate render error:', e); }
+}
+
+// ==================== CATEGORY FLAGSHIP PRODUCTS (FOR CATEGORY CARDS) ====================
+const categoryFlagshipProducts = {
+    'ultrabook': {
+        id: 1,
+        name: 'ASUS Zenbook 14 OLED (UX3405)',
+        brand: 'ASUS',
+        category: 'ultrabook',
+        price: 1299,
+        originalPrice: 1499,
+        badge: 'OLED Flagship',
+        image: 'image/laptop/ASUS Zenbook 14 OLED (UX3405).png',
+        rating: 5,
+        reviews: 142,
+        description: 'Intel Core Ultra 7 155H, 16GB LPDDR5X, 1TB SSD, 14" 3K OLED 120Hz display with ultra-slim all-metal chassis.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 155H (16 cores, up to 4.8 GHz)',
+            'Graphics': 'Intel Arc Graphics',
+            'RAM': '16GB LPDDR5X 7467MHz',
+            'Storage': '1TB M.2 NVMe PCIe 4.0 SSD',
+            'Display': '14.0" 3K (2880 x 1800) OLED 16:10 120Hz 500 nits',
+            'Weight': '1.20 kg'
+        }
+    },
+    'gaming': {
+        id: 6,
+        name: 'ASUS ROG Strix G16',
+        brand: 'ASUS',
+        category: 'gaming',
+        price: 1599,
+        originalPrice: 1799,
+        badge: 'RTX 4070',
+        image: 'image/laptop/ASUS ROG Strix G16.png',
+        rating: 5,
+        reviews: 178,
+        description: 'Intel Core i9-14900HX, NVIDIA RTX 4070 8GB, 16GB DDR5, 1TB SSD, 16" QHD+ 240Hz ROG Nebula Display.',
+        specs: {
+            'Processor': 'Intel Core i9-14900HX (24 cores / 32 threads, up to 5.8 GHz)',
+            'Graphics': 'NVIDIA GeForce RTX 4070 Laptop GPU 8GB GDDR6 (140W TGP)',
+            'RAM': '16GB DDR5-5600MHz (expandable to 64GB)',
+            'Storage': '1TB PCIe 4.0 NVMe M.2 SSD',
+            'Display': '16" QHD+ (2560 x 1600) ROG Nebula 240Hz 3ms 100% DCI-P3',
+            'Weight': '2.50 kg'
+        }
+    },
+    'business': {
+        id: 11,
+        name: 'Lenovo ThinkPad X1 Carbon Gen 13',
+        brand: 'Lenovo',
+        category: 'business',
+        price: 1649,
+        originalPrice: 1899,
+        badge: 'Aura Edition',
+        image: 'image/laptop/Lenovo ThinkPad X1 Carbon Gen 13.png',
+        rating: 5,
+        reviews: 88,
+        description: 'Intel Core Ultra 7 258V Lunar Lake, 32GB LPDDR5x, 1TB SSD, 14" 2.8K OLED 120Hz, carbon fiber under 1kg.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 258V (8 cores, Intel AI Boost NPU)',
+            'Graphics': 'Intel Arc 140V GPU',
+            'RAM': '32GB LPDDR5x 8533MHz',
+            'Storage': '1TB M.2 2280 PCIe 4.0 NVMe Opal 2.0 SSD',
+            'Display': '14.0" 2.8K (2880 x 1800) OLED 120Hz 400 nits Anti-Glare 100% DCI-P3',
+            'Weight': '0.98 kg'
+        }
+    },
+    '2in1': {
+        id: 16,
+        name: 'HP Spectre x360 14',
+        brand: 'HP',
+        category: '2in1',
+        price: 1449,
+        originalPrice: 1649,
+        badge: 'Convertible OLED',
+        image: 'image/laptop/HP Spectre x360 14.png',
+        rating: 5,
+        reviews: 82,
+        description: 'Intel Core Ultra 7 155H, 16GB LPDDR5x, 1TB SSD, 14.0" 2.8K OLED Touch 360° flip with tilt pen included.',
+        specs: {
+            'Processor': 'Intel Core Ultra 7 155H (16 cores, up to 4.8 GHz)',
+            'Graphics': 'Intel Arc Graphics',
+            'RAM': '16GB LPDDR5x 7467MHz',
+            'Storage': '1TB PCIe Gen4 NVMe M.2 SSD',
+            'Display': '14.0" 2.8K (2880 x 1800) OLED 120Hz Touch 500 nits HDR, 360° hinge',
+            'Weight': '1.44 kg'
+        }
+    },
+    'budget': {
+        id: 22,
+        name: 'ASUS Vivobook 15',
+        brand: 'ASUS',
+        category: 'budget',
+        price: 599,
+        originalPrice: 699,
+        badge: 'Student Favorite',
+        image: 'image/laptop/ASUS Vivobook 15.png',
+        rating: 5,
+        reviews: 180,
+        description: 'Intel Core i5-1335U, 16GB DDR4, 512GB SSD, 15.6" FHD NanoEdge Anti-Glare Display with 180° lay-flat hinge.',
+        specs: {
+            'Processor': 'Intel Core i5-1335U (10 cores, up to 4.6 GHz)',
+            'Graphics': 'Intel Iris Xe Graphics',
+            'RAM': '16GB DDR4 3200MHz',
+            'Storage': '512GB M.2 NVMe PCIe 3.0 SSD',
+            'Display': '15.6" FHD (1920 x 1080) NanoEdge Anti-Glare 250 nits',
+            'Weight': '1.70 kg'
+        }
+    },
+    'workstation': {
+        id: 27,
+        name: 'Lenovo ThinkPad P16 Gen 2',
+        brand: 'Lenovo',
+        category: 'workstation',
+        price: 2199,
+        originalPrice: 2499,
+        badge: 'Workstation',
+        image: 'image/laptop/Lenovo ThinkPad P16 Gen 2 .png',
+        rating: 5,
+        reviews: 64,
+        description: 'Intel Core i9-13980HX, NVIDIA RTX 4080 12GB, 32GB DDR5, 1TB SSD, 16.0" 4K OLED 500 nits professional workstation.',
+        specs: {
+            'Processor': 'Intel Core i9-13980HX (24 cores, up to 5.60 GHz)',
+            'Graphics': 'NVIDIA GeForce RTX 4080 Laptop GPU 12GB GDDR6',
+            'RAM': '32GB DDR5-5600MHz (Supports up to 192GB)',
+            'Storage': '1TB SSD M.2 2280 PCIe Gen4 Performance TLC Opal',
+            'Display': '16.0" WQUXGA (3840 x 2400) OLED Touch 100% DCI-P3 500 nits',
+            'Weight': '2.95 kg'
+        }
+    }
+};
+window.categoryFlagshipProducts = categoryFlagshipProducts;
+
+// ==================== OPEN CATEGORY PRODUCT DETAIL (ON CLICK CATEGORY CARDS) ====================
+function openCategoryProductDetail(category, element) {
+    const allCatCards = document.querySelectorAll('.category-card');
+    allCatCards.forEach(c => c.classList.remove('active'));
+    if (element) element.classList.add('active');
+
+    // Sync with filter in background
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        if (btn.getAttribute('data-filter') === category) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    if (typeof filterProducts === 'function') {
+        filterProducts(category);
+    }
+
+    // Open detail modal for the category flagship model
+    const product = categoryFlagshipProducts[category];
+    if (product) {
+        openProductDetail(product);
+    } else if (typeof selectCategory === 'function') {
+        selectCategory(category, element);
+    }
+}
+window.openCategoryProductDetail = openCategoryProductDetail;
+
+// ==================== BROWSE CATEGORY FROM MODAL ====================
+function browseCategoryFromModal(categoryKey) {
+    closeModal();
+    const productsSection = document.getElementById('products');
+    if (productsSection) {
+        productsSection.classList.remove('section-hidden');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(b => {
+            if (b.getAttribute('data-filter') === categoryKey) {
+                b.classList.add('active');
+            } else {
+                b.classList.remove('active');
+            }
+        });
+        if (typeof filterProducts === 'function') {
+            filterProducts(categoryKey);
+        }
+        const navbar = document.querySelector('.navbar');
+        const navbarHeight = navbar ? navbar.offsetHeight : 70;
+        const top = productsSection.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 12;
+        window.scrollTo({ top, behavior: 'smooth' });
+    }
+}
+window.browseCategoryFromModal = browseCategoryFromModal;
+
 // ==================== OPEN PRODUCT DETAIL MODAL ====================
 function openProductDetail(product) {
+    if (!product) return;
     const modal = document.getElementById('productModal');
     const modalBody = document.getElementById('modalBody');
     const modalTitle = document.getElementById('modalTitle');
+    if (!modal || !modalBody) return;
 
-    modalTitle.textContent = product.name;
+    if (modalTitle) {
+        modalTitle.textContent = product.name || 'Product Details';
+    }
 
+    // Safe specs parsing
     let specsHTML = '';
-    for (const [key, value] of Object.entries(product.specs)) {
+    const specs = (product.specs && typeof product.specs === 'object') ? product.specs : {
+        'Processor': product.description || 'High Performance Processor',
+        'Category': product.category || 'Laptop',
+        'Brand': product.brand || 'Premium Brand',
+        'Price': `$${product.price}`
+    };
+    for (const [key, value] of Object.entries(specs)) {
         specsHTML += `
             <div class="spec-item">
                 <span class="spec-label">${key}</span>
@@ -1576,62 +2407,86 @@ function openProductDetail(product) {
         `;
     }
 
+    const ratingVal = Math.min(5, Math.max(1, parseInt(product.rating, 10) || 5));
+    const starsHTML = '★'.repeat(ratingVal) + '☆'.repeat(5 - ratingVal);
+    const reviewsVal = product.reviews || 84;
+    const priceVal = product.price || 999;
+    const origPriceHTML = product.originalPrice ? `<span class="detail-original-price">$${product.originalPrice}</span>` : '';
+    const categoryKey = product.category || 'all';
+
+    let fallbackImg = 'image/cat-ultrabook.png';
+    if (product.category === 'gaming') fallbackImg = 'image/laptop/ASUS ROG Strix G16.png';
+    else if (product.category === 'business') fallbackImg = 'image/laptop/Lenovo ThinkPad X1 Carbon Gen 13.png';
+    else if (product.category === '2in1') fallbackImg = 'image/laptop/HP Spectre x360 14.png';
+    else if (product.category === 'budget') fallbackImg = 'image/laptop/ASUS Vivobook 15.png';
+    else if (product.category === 'workstation') fallbackImg = 'image/laptop/Dell Precision 7680.png';
+
+    if (product.brand === 'Apple' || (product.name && product.name.toLowerCase().includes('macbook'))) {
+        fallbackImg = 'image/laptop/Apple MacBook Air M4.png';
+    }
+
     modalBody.innerHTML = `
         <div class="detail-container">
             <div class="detail-image">
-                <img src="${product.image}" alt="${product.name}">
+                <img src="${product.image || fallbackImg}" alt="${product.name}" onerror="this.onerror=null; this.src='${fallbackImg}'">
+                ${product.badge ? `<div class="detail-badge">${product.badge}</div>` : ''}
             </div>
             <div class="detail-info">
                 <h3>${product.name}</h3>
                 <div class="detail-rating">
-                    <span class="stars-large">${'★'.repeat(product.rating)}${'☆'.repeat(5 - product.rating)}</span>
-                    <span class="review-count">${product.reviews} reviews</span>
+                    <span class="stars-large">${starsHTML}</span>
+                    <span class="review-count">(${reviewsVal} verified reviews)</span>
                 </div>
-                <div class="detail-price">$${product.price}</div>
+                <div class="detail-price-box">
+                    <span class="detail-price">$${priceVal}</span>
+                    ${origPriceHTML}
+                </div>
                 <div class="detail-specs">
                     ${specsHTML}
                 </div>
-                <p class="detail-description">${product.description}</p>
+                <p class="detail-description">${product.description || ''}</p>
                 <div class="detail-buttons">
-                    <button class="detail-add-cart" onclick="addProductToCart(${product.id})">Add to Cart</button>
+                    <button class="detail-add-cart" onclick="addProductToCart(${product.id}); if(typeof showNotification==='function') showNotification('Added ${product.name.replace(/'/g, "\\'")} to cart! 🛒');"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
                     <button class="detail-wishlist" data-product-id="${product.id}" onclick="toggleWishlistDetail(event)">♡ Wishlist</button>
                 </div>
+                <button class="detail-browse-more-btn" onclick="browseCategoryFromModal('${categoryKey}')">
+                    <i class="fa-solid fa-arrow-down"></i> Browse All ${product.brand || ''} & Similar Models
+                </button>
             </div>
         </div>
     `;
 
-    // Hide all sections and show only product detail
-    if (homeSection) homeSection.classList.add('section-hidden');
-    if (productsSection) productsSection.classList.add('section-hidden');
-    if (dealsSection) dealsSection.classList.add('section-hidden');
-    if (aboutSection) aboutSection.classList.add('section-hidden');
-    if (contactSection) contactSection.classList.add('section-hidden');
-    
-    // Show the product detail modal as a section
-    modal.classList.remove('section-hidden');
+    // Open modal as an overlay
     modal.classList.add('active');
-    modal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.body.style.overflow = 'hidden';
 
     // Update wishlist button state
     const wishlistBtn = modalBody.querySelector('.detail-wishlist');
     const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-    if (wishlist.includes(product.id)) {
+    if (wishlist.includes(product.id) && wishlistBtn) {
         wishlistBtn.classList.add('active');
+        wishlistBtn.innerHTML = '❤️ In Wishlist';
     }
 }
+window.openProductDetail = openProductDetail;
 
 // ==================== CLOSE MODAL ====================
 function closeModal() {
     const modal = document.getElementById('productModal');
-    modal.classList.remove('active');
-    modal.classList.add('section-hidden');
-    
-    // Show products section again
-    if (productsSection) {
-        productsSection.classList.remove('section-hidden');
-        productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
     }
 }
+window.closeModal = closeModal;
+
+// Close modal when clicking outside modal-content
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('productModal');
+    if (e.target === modal) {
+        closeModal();
+    }
+});
 
 // ==================== FILTER PRODUCTS ====================
 const filterBtns = document.querySelectorAll('.filter-btn');
@@ -1688,6 +2543,115 @@ dropdownItems.forEach(item => {
             hamburgerMenu.classList.remove('active');
             navMenu.classList.remove('active');
         }
+    });
+});
+
+// ==================== CATEGORY CAROUSEL & SELECTION ====================
+function selectCategory(category, element) {
+    // 1. Highlight the clicked category card
+    const allCatCards = document.querySelectorAll('.category-card');
+    allCatCards.forEach(c => c.classList.remove('active'));
+
+    if (element) {
+        element.classList.add('active');
+    } else if (typeof event !== 'undefined' && event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+    }
+
+    // 2. Ensure products and home sections are visible
+    const productsSection = document.getElementById('products');
+    const homeSection = document.getElementById('home');
+    if (productsSection) productsSection.classList.remove('section-hidden');
+    if (homeSection) homeSection.classList.remove('section-hidden');
+
+    // 3. Update active filter button in products section
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    let matched = false;
+    filterBtns.forEach(btn => {
+        if (btn.getAttribute('data-filter') === category) {
+            btn.classList.add('active');
+            matched = true;
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    if (!matched && category !== 'all') {
+        const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
+        if (allBtn) allBtn.classList.remove('active');
+    }
+
+    // 4. Perform product filtering
+    if (typeof filterProducts === 'function') {
+        filterProducts(category);
+    }
+
+    // 5. Smooth scroll down to products section
+    if (productsSection) {
+        const navbar = document.querySelector('.navbar');
+        const navbarHeight = navbar ? navbar.offsetHeight : 70;
+        const top = productsSection.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 12;
+        window.scrollTo({ top, behavior: 'smooth' });
+    }
+
+    // 6. User notification
+    const catMap = {
+        'all': 'All',
+        'ultrabook': 'Ultrabook',
+        'gaming': 'Gaming',
+        'business': 'Business',
+        '2in1': '2-in-1',
+        'budget': 'Student',
+        'workstation': 'Workstation'
+    };
+    const catName = catMap[category] || (category ? (category.charAt(0).toUpperCase() + category.slice(1)) : 'All');
+    if (typeof showNotification === 'function') {
+        showNotification(`Browsing ${catName} Laptops 💻`, 2200);
+    }
+}
+window.selectCategory = selectCategory;
+
+function scrollCategoryGrid(direction = 'next') {
+    const grid = document.getElementById('categoryCardsGrid');
+    if (!grid) return;
+
+    const scrollAmount = 450;
+    const maxScroll = Math.max(0, grid.scrollWidth - grid.clientWidth);
+
+    if (maxScroll <= 5) {
+        grid.style.transition = 'transform 0.2s ease';
+        grid.style.transform = direction === 'next' ? 'translateX(-12px)' : 'translateX(12px)';
+        setTimeout(() => { grid.style.transform = 'translateX(0)'; }, 200);
+        return;
+    }
+
+    if (direction === 'prev') {
+        if (grid.scrollLeft <= 15) {
+            grid.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        } else {
+            grid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        }
+    } else {
+        if (grid.scrollLeft >= maxScroll - 15) {
+            grid.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+    }
+}
+window.scrollCategoryGrid = scrollCategoryGrid;
+
+// Bind keyboard support (Enter / Space) to category & popular cards
+document.addEventListener('DOMContentLoaded', () => {
+    const interactiveCards = document.querySelectorAll('.category-card, .popular-card');
+    interactiveCards.forEach(card => {
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                if (e.target && e.target.closest('button')) return;
+                e.preventDefault();
+                card.click();
+            }
+        });
     });
 });
 
@@ -2304,9 +3268,13 @@ loadMoreBtn.addEventListener('click', () => {
 });
 
 // ==================== INITIALIZE ====================
-document.addEventListener('DOMContentLoaded', () => {
+function initStore() {
     updateAuthUI();
     renderProducts();
+    updateCartBadge();
+    if (loadMoreBtn && displayedCount >= allProducts.length) {
+        loadMoreBtn.style.display = 'none';
+    }
     const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
     wishlist.forEach(productId => {
         const btn = document.querySelector(`.wishlist-btn[data-product-id="${productId}"]`);
@@ -2316,20 +3284,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     updateWishlistBadge();
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStore);
+} else {
+    initStore();
+}
 
 function startCountdownTimer() {
-    // Main deal timer
+    const daysEl = document.getElementById('timerDays');
+    const hoursEl = document.getElementById('timerHours');
+    const minutesEl = document.getElementById('timerMinutes');
+    const secondsEl = document.getElementById('timerSeconds');
+
+    if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
+    let days = parseInt(daysEl.textContent) || 0;
+    let hours = parseInt(hoursEl.textContent) || 0;
+    let minutes = parseInt(minutesEl.textContent) || 0;
+    let seconds = parseInt(secondsEl.textContent) || 0;
+
     const timerInterval = setInterval(() => {
-        let days = parseInt(document.getElementById('timerDays').textContent);
-        let hours = parseInt(document.getElementById('timerHours').textContent);
-        let minutes = parseInt(document.getElementById('timerMinutes').textContent);
-        let seconds = parseInt(document.getElementById('timerSeconds').textContent);
-
-        // Decrease seconds
         seconds--;
-
-        // Handle time overflow
         if (seconds < 0) {
             seconds = 59;
             minutes--;
@@ -2350,11 +3327,10 @@ function startCountdownTimer() {
             seconds = 0;
         }
 
-        // Update display with leading zeros
-        document.getElementById('timerDays').textContent = String(days).padStart(2, '0');
-        document.getElementById('timerHours').textContent = String(hours).padStart(2, '0');
-        document.getElementById('timerMinutes').textContent = String(minutes).padStart(2, '0');
-        document.getElementById('timerSeconds').textContent = String(seconds).padStart(2, '0');
+        if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+        if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+        if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+        if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
     }, 1000);
 }
 
@@ -2912,7 +3888,8 @@ console.log('Deals section initialized successfully!');
 
 document.addEventListener("DOMContentLoaded", () => {
     const imageWrapper = document.querySelector('.about-image-wrapper');
-    
+    if (!imageWrapper) return;
+
     // Set initial invisible state dynamically via JS
     imageWrapper.style.opacity = "0";
     imageWrapper.style.transform = "translateX(50px)";
@@ -2961,4 +3938,5 @@ function handleContact(platform, destination) {
         window.open(url, '_blank');
     }
 }
+
 
