@@ -2326,30 +2326,7 @@ window.categoryFlagshipProducts = categoryFlagshipProducts;
 
 // ==================== OPEN CATEGORY PRODUCT DETAIL (ON CLICK CATEGORY CARDS) ====================
 function openCategoryProductDetail(category, element) {
-    const allCatCards = document.querySelectorAll('.category-card');
-    allCatCards.forEach(c => c.classList.remove('active'));
-    if (element) element.classList.add('active');
-
-    // Sync with filter in background
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    filterBtns.forEach(btn => {
-        if (btn.getAttribute('data-filter') === category) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
-    if (typeof filterProducts === 'function') {
-        filterProducts(category);
-    }
-
-    // Open detail modal for the category flagship model
-    const product = categoryFlagshipProducts[category];
-    if (product) {
-        openProductDetail(product);
-    } else if (typeof selectCategory === 'function') {
-        selectCategory(category, element);
-    }
+    selectCategory(category, element);
 }
 window.openCategoryProductDetail = openCategoryProductDetail;
 
@@ -2584,6 +2561,11 @@ function selectCategory(category, element) {
     // 4. Perform product filtering
     if (typeof filterProducts === 'function') {
         filterProducts(category);
+    }
+
+    const loadMoreBtn = document.querySelector('.load-more-btn');
+    if (loadMoreBtn) {
+        loadMoreBtn.style.display = (category === 'all' && typeof displayedCount !== 'undefined' && typeof allProducts !== 'undefined' && displayedCount < allProducts.length) ? 'block' : 'none';
     }
 
     // 5. Smooth scroll down to products section
