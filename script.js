@@ -2363,9 +2363,38 @@ function openProductDetail(product) {
     const modalTitle = document.getElementById('modalTitle');
     if (!modal || !modalBody) return;
 
+    const brandName = product.brand || 'Official';
+    const categoryName = (product.category || 'Laptop').toUpperCase();
+
     if (modalTitle) {
-        modalTitle.textContent = product.name || 'Product Details';
+        modalTitle.innerHTML = `
+            <div class="modal-header-meta">
+                <span class="modal-meta-brand"><i class="fa-solid fa-laptop"></i> ${brandName}</span>
+                <span class="modal-meta-divider">•</span>
+                <span class="modal-meta-category">${categoryName}</span>
+            </div>
+        `;
     }
+
+    // Spec Icons mapping
+    const specIcons = {
+        'processor': 'fa-solid fa-microchip',
+        'cpu': 'fa-solid fa-microchip',
+        'graphics': 'fa-solid fa-display',
+        'gpu': 'fa-solid fa-display',
+        'ram': 'fa-solid fa-memory',
+        'memory': 'fa-solid fa-memory',
+        'storage': 'fa-solid fa-hard-drive',
+        'ssd': 'fa-solid fa-hard-drive',
+        'display': 'fa-solid fa-tv',
+        'screen': 'fa-solid fa-tv',
+        'weight': 'fa-solid fa-weight-scale',
+        'battery': 'fa-solid fa-battery-full',
+        'os': 'fa-brands fa-windows',
+        'category': 'fa-solid fa-layer-group',
+        'brand': 'fa-solid fa-tag',
+        'price': 'fa-solid fa-dollar-sign'
+    };
 
     // Safe specs parsing
     let specsHTML = '';
@@ -2375,10 +2404,16 @@ function openProductDetail(product) {
         'Brand': product.brand || 'Premium Brand',
         'Price': `$${product.price}`
     };
+
     for (const [key, value] of Object.entries(specs)) {
+        const iconKey = key.toLowerCase().trim();
+        const iconClass = specIcons[iconKey] || 'fa-solid fa-circle-check';
         specsHTML += `
             <div class="spec-item">
-                <span class="spec-label">${key}</span>
+                <span class="spec-label">
+                    <i class="${iconClass}"></i>
+                    <span>${key}</span>
+                </span>
                 <span class="spec-value">${value}</span>
             </div>
         `;
@@ -2389,6 +2424,18 @@ function openProductDetail(product) {
     const reviewsVal = product.reviews || 84;
     const priceVal = product.price || 999;
     const origPriceHTML = product.originalPrice ? `<span class="detail-original-price">$${product.originalPrice}</span>` : '';
+
+    let discountBadgeHTML = '';
+    if (product.originalPrice && product.originalPrice > priceVal) {
+        const discountPercent = Math.round(((product.originalPrice - priceVal) / product.originalPrice) * 100);
+        const savedAmount = product.originalPrice - priceVal;
+        discountBadgeHTML = `
+            <span class="detail-discount-badge">
+                <i class="fa-solid fa-tag"></i> SAVE $${savedAmount} (${discountPercent}% OFF)
+            </span>
+        `;
+    }
+
     const categoryKey = product.category || 'all';
 
     let fallbackImg = 'image/cat-ultrabook.png';
@@ -2402,32 +2449,80 @@ function openProductDetail(product) {
         fallbackImg = 'image/laptop/Apple MacBook Air M4.png';
     }
 
+    // Clean badge string
+    let badgeText = product.badge || '';
+    if (badgeText.includes('')) {
+        badgeText = badgeText.replace('', '°');
+    }
+
     modalBody.innerHTML = `
         <div class="detail-container">
-            <div class="detail-image">
-                <img src="${product.image || fallbackImg}" alt="${product.name}" onerror="this.onerror=null; this.src='${fallbackImg}'">
-                ${product.badge ? `<div class="detail-badge">${product.badge}</div>` : ''}
+            <!-- Left: Showcase Image + Guarantees -->
+            <div class="detail-visual-col">
+                <div class="detail-image-box">
+                    <img src="${product.image || fallbackImg}" alt="${product.name}" onerror="this.onerror=null; this.src='${fallbackImg}'">
+                    ${badgeText ? `<div class="detail-badge"><i class="fa-solid fa-bolt"></i> ${badgeText}</div>` : ''}
+                </div>
+                <div class="detail-guarantees">
+                    <div class="guarantee-chip">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>100% Genuine</span>
+                    </div>
+                    <div class="guarantee-chip">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <span>Free Shipping</span>
+                    </div>
+                    <div class="guarantee-chip">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>7-Day Return</span>
+                    </div>
+                </div>
             </div>
+
+            <!-- Right: Product Information & Specs -->
             <div class="detail-info">
-                <h3>${product.name}</h3>
+                <div class="detail-brand-badge-row">
+                    <span class="detail-brand-tag">${brandName}</span>
+                    <span class="detail-stock-status"><i class="fa-solid fa-circle-check"></i> In Stock</span>
+                </div>
+
+                <h3 class="detail-title">${product.name}</h3>
+
                 <div class="detail-rating">
                     <span class="stars-large">${starsHTML}</span>
+                    <span class="rating-num">${ratingVal}.0</span>
                     <span class="review-count">(${reviewsVal} verified reviews)</span>
                 </div>
+
                 <div class="detail-price-box">
                     <span class="detail-price">$${priceVal}</span>
                     ${origPriceHTML}
+                    ${discountBadgeHTML}
                 </div>
-                <div class="detail-specs">
-                    ${specsHTML}
+
+                <div class="detail-specs-box">
+                    <div class="specs-box-header">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>KEY SPECIFICATIONS</span>
+                    </div>
+                    <div class="detail-specs-grid">
+                        ${specsHTML}
+                    </div>
                 </div>
+
                 <p class="detail-description">${product.description || ''}</p>
-                <div class="detail-buttons">
-                    <button class="detail-add-cart" onclick="addProductToCart(${product.id}); if(typeof showNotification==='function') showNotification('Added ${product.name.replace(/'/g, "\\'")} to cart! 🛒');"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
-                    <button class="detail-wishlist" data-product-id="${product.id}" onclick="toggleWishlistDetail(event)">♡ Wishlist</button>
+
+                <div class="detail-actions">
+                    <button class="detail-add-cart" onclick="addProductToCart(${product.id}); if(typeof showNotification==='function') showNotification('Added ${product.name.replace(/'/g, "\\'")} to cart! 🛒');">
+                        <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                    </button>
+                    <button class="detail-wishlist" data-product-id="${product.id}" onclick="toggleWishlistDetail(event)" title="Add to Wishlist">
+                        ♡ Wishlist
+                    </button>
                 </div>
+
                 <button class="detail-browse-more-btn" onclick="browseCategoryFromModal('${categoryKey}')">
-                    <i class="fa-solid fa-arrow-down"></i> Browse All ${product.brand || ''} & Similar Models
+                    <i class="fa-solid fa-arrow-down"></i> Browse All ${product.brand || ''} &amp; Similar Models
                 </button>
             </div>
         </div>
@@ -2442,7 +2537,7 @@ function openProductDetail(product) {
     const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
     if (wishlist.includes(product.id) && wishlistBtn) {
         wishlistBtn.classList.add('active');
-        wishlistBtn.innerHTML = '❤️ In Wishlist';
+        wishlistBtn.innerHTML = '♥ Wishlist';
     }
 }
 window.openProductDetail = openProductDetail;
